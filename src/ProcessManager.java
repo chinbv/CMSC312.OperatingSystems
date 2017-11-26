@@ -9,7 +9,7 @@ import com.sun.xml.internal.bind.v2.runtime.reflect.ListIterator;
 
 public class ProcessManager {
 
-	private ArrayList<Process> listOfProcesses;
+	public ArrayList<Process> listOfProcesses;
 	int lastAssignedProcessId = 1;
 	int processPriority = 0;
 
