@@ -1,34 +1,33 @@
 //max waiting time for IO = 50
 import java.util.Random;
-public class IO
-{
+public class IO {
     private boolean busy;
     private int iofinish;
-    public IO(CPU cpu)
-    {
+
+    public IO(CPU cpu) {
         this.cpu = cpu;
     }
 
     private Random randomIO = new Random();
 
-    public int generateIOBurst()
-    {
-        return iofinish = OSClock.getClock() + ((randomIO.nextInt(50))); //double check 50
+    public int generateIOBurst() {
+        iofinish = OSClock.getClock() + ((randomIO.nextInt(50))); //double check 50
+        reyurn iofinish;
         busy = true;
     }
 
     public void IOExecution
+
     {
-        if (OSClock.getClock >= iofinish && busy)
-        {
+        if (OSClock.getClock() >= iofinish && busy) {
             cpu.interruptProcessor.setFlag(InterruptProcessor.IOComplete);//FIX THIS
             busy = false;
         }
     }
-    public boolean IOAvailability()
-    {
+
+    public boolean IOAvailability() {
         return busy;
     }
-        
+}
 
 }
