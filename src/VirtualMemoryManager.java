@@ -1,31 +1,32 @@
-public class VMM {
+/*
+public class VirtualMemoryManager {
 
-        private final static int maxMemorySize = 256; //kb
-        private static int currentFreeMemory = maxMemorySize;
-        private static int memoryUsed = 0;
+        private final static long maxMemorySize = 4096;
+        private static long currentFreeMemory = maxMemorySize;
+        private static long memoryUsed = 0;
 
-        public int getCurrFreeMemory()
+        public long getCurrFreeMemory()
         {
             return currentFreeMemory;
         }
-        public int getMemoryUsed()
+        public long getMemoryUsed()
         {
             return memoryUsed;
         }
-        public int getmaxMemory()
+        public long getmaxMemory()
         {
             return maxMemorySize;
         }
-        public int increaseMemoryUsed(int x)
+        public boolean allocate(long x)
         {
             currentFreeMemory -= x;
             memoryUsed += x;
             return memoryUsed;
         }
 
-        public int decreaseMemoryUsed(int x)
+        public int dealloc(long value)
         {
-            currentFreeMemory + value;
+            currentFreeMemory += value;
             memoryUsed -= value;
             if (memoryUsed < 0)
             {
@@ -36,8 +37,7 @@ public class VMM {
 
 
 }
-
-/**
+*/
 
 public class VirtualMemoryManager {
 
@@ -47,7 +47,7 @@ public class VirtualMemoryManager {
 	long currentFreeMemorySize = maxMemorySize;
 	int[] allocatedMemoryArray;
 	
-	public int[] allocation(long size) {
+	public int[] allocate(long size) {
 		
 		if(size <= currentFreeMemorySize) {
 			currentFreeMemorySize = currentFreeMemorySize - size;
@@ -63,4 +63,4 @@ public class VirtualMemoryManager {
 	}
 	
 }
-**/
+

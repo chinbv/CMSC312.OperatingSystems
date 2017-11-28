@@ -6,7 +6,7 @@ import java.util.Queue;
 
 public abstract class SchedulerManager {
 	
-	public abstract Queue<Process> schedule(ArrayList<Process> listOfPRocesses);
+	public abstract Queue<ProcessControlBlock> schedule(ArrayList<ProcessControlBlock> listOfPRocesses);
 	
 	private int waitingTime;
 	private int turnAroundTime;
@@ -22,9 +22,9 @@ public abstract class SchedulerManager {
 	
 	private static ProcessManager _processManager = new ProcessManager();
 	
-	public ArrayList<Process> readyQueue;
-	public ArrayList<Process> waitingQueue;
-	public ArrayList<Process> runningQueue;
+	public ArrayList<ProcessControlBlock> readyQueue;
+	public ArrayList<ProcessControlBlock> waitingQueue;
+	public ArrayList<ProcessControlBlock> runningQueue;
 	
 	public SchedulerManager() {
 		

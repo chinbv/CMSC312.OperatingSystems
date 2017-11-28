@@ -18,16 +18,33 @@ public class Weeboo {
 	
 	private static VirtualMemoryManager _memoryManager = new VirtualMemoryManager();
 	private static ProcessManager _processManager = new ProcessManager();
+	private static ArrayList<CPU> cpuArray = null;
+
 	
 	
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		boolean complete = false;
+		int numberOfCPUs = 2;
+		int numberOfCoresPerCPU = 4;
 
 		
 		Scanner in = new Scanner(System.in);
 		
-		System.out.print("Weeboo:~ welcome$ " + "\n");
+		System.out.print("Weeboo:~ Booting$ " + "\n");
+		
+		// initialize CPUs
+		System.out.print("Initializing CPUs$ " + "\n");
+
+		cpuArray = new ArrayList<CPU>();
+		for( int cpuCounter = 0; cpuCounter < numberOfCPUs; cpuCounter++ ) {
+			System.out.print("CPU: " + cpuCounter + "\n");
+
+			CPU newCPU = new CPU(numberOfCoresPerCPU);
+			cpuArray.add(newCPU);
+			newCPU.initialize();
+		}
+		
 		
 //		File directory = new File("./");
 //		System.out.println(directory.getAbsolutePath());
@@ -49,7 +66,7 @@ public class Weeboo {
 		Path myPath = loadFilePath.toPath();
 		System.out.print("Path: "+ myPath + "\n");
 
-		Process process = Weeboo.processManager().createProcess(myPath);
+		ProcessControlBlock process = Weeboo.processManager().createProcess(myPath);
 		
 		BufferedReader fileReader = new BufferedReader(new FileReader(loadFilePath));
 		String line = null;

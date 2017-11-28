@@ -1,8 +1,8 @@
 
-public class Process {
+public class ProcessControlBlock {
 
-	int id;
-	int priority;
+	private int _processID;
+	private int _priority;
 //	String executableName;
 	processState currentState;
 	
@@ -19,23 +19,23 @@ public class Process {
 	/**
 	 * @return the id
 	 */
-	public int getId() {
-		return id;
+	public int processID() {
+		return _processID;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
 	public void setId(int id) {
-		this.id = id;
+		this._processID = id;
 	}
 	
-	public int getPriority() {
-		return priority;
+	public int priority() {
+		return _priority;
 	}
 	
 	public void setPriority(int priority) {
-		this.priority = priority;
+		this._priority = priority;
 	}
 	
 //	public String getName() {
@@ -110,13 +110,17 @@ public class Process {
 		}
 		return returnString;
 	}
+	
+	synchronized public void executeTick() {
+		System.out.println("executing process ID: " + _processID);
+	}
 
 //	
 	
-	public Process(int id, int priority) {
+	public ProcessControlBlock(int id, int priority) {
 		
-		this.id = id;
-		this.priority = priority;
+		this._processID = id;
+		this._priority = priority;
 //		this.executableName = executableName;
 		this.currentState = processState.NEW;
 		

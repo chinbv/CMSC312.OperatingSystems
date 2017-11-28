@@ -9,15 +9,17 @@ import com.sun.xml.internal.bind.v2.runtime.reflect.ListIterator;
 
 public class ProcessManager {
 
-	public ArrayList<Process> listOfProcesses;
+	private ArrayList<ProcessControlBlock> listOfProcesses;
 	int lastAssignedProcessId = 1;
 	int processPriority = 0;
+	private static Object schedulerLock = null;
+	
 
 	public ProcessManager() {
-		listOfProcesses = new ArrayList<Process>();
+		listOfProcesses = new ArrayList<ProcessControlBlock>();
 	}
 
-	public Process createProcess(Path path) throws IOException {
+	public ProcessControlBlock createProcess(Path path) throws IOException {
 
 		int[] memoryBlock;
 		String loadFilePath = "";
@@ -28,16 +30,21 @@ public class ProcessManager {
 		int priority = assigningPriority();
 		//
 		//States: NEW(1), READY(2), RUN(3), WAIT(4), EXIT(5)
-		Process process = new Process(processId, priority);
+		ProcessControlBlock process = new ProcessControlBlock(processId, priority);
 		// stat call using file managment system to get size of file
 		long fileSize = Files.size(executablePath);
 		// buffered reader
-		memoryBlock = Weeboo.memoryManager().allocation(fileSize);
+		memoryBlock = Weeboo.memoryManager().allocate(fileSize);
 		// System.out.println("Max Size: " +
 		// Weeboo.memoryManager().maxMemorySize + " CFMS: "
 		// + Weeboo.memoryManager().currentFreeMemorySize);
 		listOfProcesses.add(process);
 		return process;
+	}
+	
+	public static Object schedulerLock() {
+		
+		return schedulerLock;
 	}
 
 	private int nextAvailableProcessId() {
@@ -55,11 +62,11 @@ public class ProcessManager {
 
 	public void dumpProcessArrayContents() {
 
-		Iterator<Process> processListIterator = listOfProcesses.iterator();
+		Iterator<ProcessControlBlock> processListIterator = listOfProcesses.iterator();
 		while(processListIterator.hasNext() == true) {
-			Process aProcess = processListIterator.next();
+			ProcessControlBlock aProcess = processListIterator.next();
 			
-			System.out.println("PID: " + aProcess.id + " Priority: " + aProcess.priority + " State: " + aProcess.stringForProcessState());
+			System.out.println("PID: " + aProcess.processID() + " Priority: " + aProcess.priority() + " State: " + aProcess.stringForProcessState());
 		}
 	}
 
