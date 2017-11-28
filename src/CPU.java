@@ -11,7 +11,7 @@ public class CPU {
 		
 		_cpuID = aCPUID;
 		_cpuCores = new ArrayList<CPUCore>();
-		for( coreCount = 0; coreCount > numberOfCores; coreCount++ ) {
+		for( coreCount = 0; coreCount < numberOfCores; coreCount++ ) {
 			CPUCore newCore = new CPUCore(this, coreCount);
 			
 			_cpuCores.add(newCore);

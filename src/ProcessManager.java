@@ -12,7 +12,7 @@ public class ProcessManager {
 	private ArrayList<ProcessControlBlock> listOfProcesses;
 	int lastAssignedProcessId = 1;
 	int processPriority = 0;
-	private static Object schedulerLock = null;
+	private static Object _schedulerLock = null;
 	
 
 	public ProcessManager() {
@@ -58,8 +58,10 @@ public class ProcessManager {
 	}
 	
 	public static Object schedulerLock() {
-		
-		return schedulerLock;
+		if( _schedulerLock == null ) {
+			_schedulerLock = new Object();
+		}
+		return _schedulerLock;
 	}
 
 	private int nextAvailableProcessId() {

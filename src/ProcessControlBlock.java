@@ -111,11 +111,16 @@ public class ProcessControlBlock {
 	}
 	
 	public void loadExecutable(String aFilename) throws IOException {
+		
+		// for the moment, do nothing
+		return;
+		/*
 		BufferedReader fileReader = new BufferedReader(new FileReader(aFilename));
 		String line = null;
 		while ((line = fileReader.readLine()) != null) {
 			System.out.println(line);
 		}
+		*/
 		
 	}
 	
