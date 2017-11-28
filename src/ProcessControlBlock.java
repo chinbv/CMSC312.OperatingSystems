@@ -113,6 +113,12 @@ public class ProcessControlBlock {
 	
 	synchronized public void executeTick() {
 		System.out.println("executing process ID: " + _processID);
+		
+		// pretend work
+		for( int counter = 0; counter < 50; counter++ ) {
+			int something = 2;
+			something *= something;
+		}
 	}
 
 //	
