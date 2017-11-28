@@ -1,3 +1,9 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Path;
+
 
 public class ProcessControlBlock {
 
@@ -53,14 +59,7 @@ public class ProcessControlBlock {
 	public void setProcessState(processState currentState) {
 		this.currentState = currentState;
 	}
-	
-	public scriptCommands getScriptCommands() {
-		return currentScript;
-	}
-	
-	public void setScriptCommands(scriptCommands currentScript) {
-		this.currentScript = currentScript;
-	}
+
 	
 	public String stringForProcessState() {
 		//States: NEW(1), READY(2), RUN(3), WAIT(4), EXIT(5)
@@ -111,6 +110,15 @@ public class ProcessControlBlock {
 		return returnString;
 	}
 	
+	public void loadExecutable(String aFilename) throws IOException {
+		BufferedReader fileReader = new BufferedReader(new FileReader(aFilename));
+		String line = null;
+		while ((line = fileReader.readLine()) != null) {
+			System.out.println(line);
+		}
+		
+	}
+	
 	synchronized public void executeTick() {
 		System.out.println("executing process ID: " + _processID);
 		
@@ -119,6 +127,7 @@ public class ProcessControlBlock {
 			int something = 2;
 			something *= something;
 		}
+		
 	}
 
 //	

@@ -19,18 +19,19 @@ public class ProcessManager {
 		listOfProcesses = new ArrayList<ProcessControlBlock>();
 	}
 
-	public ProcessControlBlock createProcess(Path path) throws IOException {
+	public ProcessControlBlock createProcessControlBlock(Path path) throws IOException {
 
 		int[] memoryBlock;
-		String loadFilePath = "";
+		String executableFilename = "";
 
-		Path executablePath = FileSystems.getDefault().getPath(loadFilePath);
+		Path executablePath = FileSystems.getDefault().getPath(executableFilename);
 
 		int processId = nextAvailableProcessId();
 		int priority = assigningPriority();
 		//
 		//States: NEW(1), READY(2), RUN(3), WAIT(4), EXIT(5)
-		ProcessControlBlock process = new ProcessControlBlock(processId, priority);
+		ProcessControlBlock newPCB = new ProcessControlBlock(processId, priority);
+		newPCB.loadExecutable(executableFilename);
 		// stat call using file managment system to get size of file
 		long fileSize = Files.size(executablePath);
 		// buffered reader
@@ -38,8 +39,22 @@ public class ProcessManager {
 		// System.out.println("Max Size: " +
 		// Weeboo.memoryManager().maxMemorySize + " CFMS: "
 		// + Weeboo.memoryManager().currentFreeMemorySize);
-		listOfProcesses.add(process);
-		return process;
+		listOfProcesses.add(newPCB);
+		return newPCB;
+	}
+	
+	public ArrayList<ProcessControlBlock> readyQueue() {
+		ArrayList<ProcessControlBlock> readyProcesses = new ArrayList<ProcessControlBlock>();
+		
+		Iterator<ProcessControlBlock> processIterator = listOfProcesses.iterator();
+		while( processIterator.hasNext()) {
+			ProcessControlBlock aProcess = processIterator.next();
+			
+			if( aProcess.getProcessState() == ProcessControlBlock.processState.READY ) {
+				readyProcesses.add(aProcess);
+			}
+		}
+		return readyProcesses;
 	}
 	
 	public static Object schedulerLock() {
