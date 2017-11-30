@@ -42,7 +42,8 @@ public class VirtualMemoryManager {
 public class VirtualMemoryManager {
 
 	long maxMemorySize = 4096;
-	
+	VMPageInfo[] arrayOfPages = new VMPageInfo[(int) maxMemorySize];
+	private int pageAddressCount = 0;
 	
 	long currentFreeMemorySize = maxMemorySize;
 	int[] allocatedMemoryArray;
@@ -61,6 +62,12 @@ public class VirtualMemoryManager {
 	public void free(int[] allocation, int size) {
 		currentFreeMemorySize = currentFreeMemorySize + size;
 	}
+	
+	public void assigningPage() {
+		
+	}
+	
+	
 	
 }
 
