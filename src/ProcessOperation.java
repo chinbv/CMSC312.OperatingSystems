@@ -1,9 +1,5 @@
-package Processes;
-
 import java.util.Random;
 import java.util.Scanner;
-
-import Enum.OperationType;
 
 public class ProcessOperation {
 

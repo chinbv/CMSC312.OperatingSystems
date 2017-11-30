@@ -1,14 +1,8 @@
-package Processes;
-
-import Enum.ProcessState;
-import Main.OSClock;
-
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Enum.OperationType;
 
 public class Process {
 	private String processName;
@@ -62,6 +56,17 @@ public class Process {
 				burstTime += processOperations.get(i).getRunTime();
 			}
 		}
+	}
+
+	synchronized public void executeTick() {
+		System.out.println("executing process ID: " + processId);
+
+		// pretend work
+		for( int counter = 0; counter < 50; counter++ ) {
+			int something = 2;
+			something *= something;
+		}
+
 	}
 
 	public void setProcessState(ProcessState pState){

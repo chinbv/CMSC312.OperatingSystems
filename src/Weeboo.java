@@ -1,24 +1,23 @@
-//import Processes.Process;
-//import Processes.ProcessManager;
-//
-//import java.io.BufferedReader;
-//import java.io.File;
-//import java.io.FileReader;
-//import java.io.IOException;
-//import java.nio.file.Path;
-//import java.util.Scanner;
-//
-//
-//public class Weeboo {
-//
-//	int processIdCounter = 1;
-//
-////	private static VirtualMemoryManager _memoryManager = new VirtualMemoryManager();
-//	private static ProcessManager _processManager = new ProcessManager();
-//
-//
-//	public static void main(String[] args) throws IOException {
-//		// TODO Auto-generated method stub
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Scanner;
+
+
+public class Weeboo {
+
+	int processIdCounter = 1;
+
+//	private static VirtualMemoryManager _memoryManager = new VirtualMemoryManager();
+	private static ProcessManager _processManager = new ProcessManager();
+
+
+	public static void main(String[] args) throws IOException {
+
+        Terminal terminal = new Terminal();
+        terminal.initializeTerminal();
 //		boolean complete = false;
 //
 //
@@ -46,7 +45,7 @@
 //		Path myPath = loadFilePath.toPath();
 //		System.out.print("Path: "+ myPath + "\n");
 //
-////		Process process = Weeboo.processManager().createProcess(myPath);
+//		Process process = Weeboo.processManager().createProcess(myPath);
 //
 //		BufferedReader fileReader = new BufferedReader(new FileReader(loadFilePath));
 //		String line = null;
@@ -62,7 +61,7 @@
 //
 //			//execute a process (calculate)
 //
-//			Weeboo.processManager().dumpProcessArrayContents();
+//			Weeboo.processManager().PCBInfo();
 //
 //			//exit
 //			System.out.println("Time: " + osCounter);
@@ -74,21 +73,21 @@
 //		}
 //
 //		System.out.println("Exiting");
+	}
+
+
+	/**
+	 * @return the memoryManager
+	 */
+//	public static VirtualMemoryManager memoryManager() {
+//		return _memoryManager;
 //	}
-//
-//
-//	/**
-//	 * @return the memoryManager
-//	 */
-////	public static VirtualMemoryManager memoryManager() {
-////		return _memoryManager;
-////	}
-//
-//	/**
-//	 * @return the processManager
-//	 */
-//	public static ProcessManager processManager() {
-//		return _processManager;
-//	}
-//
-//}
+
+	/**
+	 * @return the processManager
+	 */
+	public static ProcessManager processManager() {
+		return _processManager;
+	}
+
+}

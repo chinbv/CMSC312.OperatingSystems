@@ -1,8 +1,3 @@
-package Main;
-
-import Processes.Process;
-import Processes.ProcessManager;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -11,12 +6,12 @@ public class Terminal {
     private int numOfCycles;
     private String file_program_toExecute = "";
     ProcessManager processManager;
-    CPU cpu;
+
 
 
     public Terminal() {
         processManager = new ProcessManager();
-        cpu = new CPU();
+
     }
 
 
@@ -50,16 +45,25 @@ public class Terminal {
             case "LOAD":
                 System.out.println("LOAD entered");
                 commandEntered = "LOAD";
-                numOfCycles = Integer.parseInt(elementsEntered.get(0));
-                System.out.println(numOfCycles);
-                file_program_toExecute = elementsEntered.get(1);
-                System.out.println(file_program_toExecute);
+                if (elementsEntered.size() == 2) {
+                    numOfCycles = Integer.parseInt(elementsEntered.get(0));
+                    System.out.println(numOfCycles);
+                    file_program_toExecute = elementsEntered.get(1);
+                    System.out.println(file_program_toExecute);
+                } else if(elementsEntered.size() == 1) {
+                    file_program_toExecute = elementsEntered.get(0);
+                    System.out.println(file_program_toExecute);
+                }
                 processManager.createProcess(file_program_toExecute, numOfCycles);
                 break;
             case "EXE":
                 System.out.println("EXE entered");
-                numOfCycles = Integer.parseInt(elementsEntered.get(0));
-                cpu.run();
+                if (elementsEntered.size() == 1) {
+                    numOfCycles = Integer.parseInt(elementsEntered.get(0));
+                } else {
+                    numOfCycles = 0;
+                }
+                exe(numOfCycles);
                 commandEntered = "EXE";
                 break;
             case "RESET":
@@ -86,14 +90,16 @@ public class Terminal {
         }
 
         for (Process p : queue) {
-            System.out.print("Process Name: " + p.getProcessName() + "\t");
-            System.out.print("State: " + p.getProcessState().toString() + "\t");
-            System.out.print("Runtime: " + p.getBurstTime() + "\t");
-            System.out.print("Remaining Burst Time: " + p.getRemainingBurstTime() + "\t");
-            if (p.getPriority() != 0) {
-                System.out.print("Priority: " + p.getPriority() + "\t");
-            }
-            System.out.print("Number of I/O bursts: " + p.getRemainingBurstTime() + "\t");
+            processManager.PCBInfo();
+        }
+    }
+
+    public void exe(int numOfCycles){
+        boolean nocycleNum;
+        if (numOfCycles == 1) {
+            nocycleNum = false;
+        } else {
+            nocycleNum = true;
         }
     }
 }

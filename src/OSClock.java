@@ -1,5 +1,3 @@
-package Main;
-
 public class OSClock
 {
     private static int time = 0;

@@ -1,4 +1,3 @@
-package Enum;
 
 public enum ProcessState {
     NEW,
