@@ -4,7 +4,7 @@ public class CPUCore extends Thread {
 
 	private CPU parentCPU;
 	@SuppressWarnings("unused")
-	private ProcessControlBlock assignedPCB = null;
+	private Process assignedPCB = null;
 	private Object schedulerLock;
 	private boolean stopRequested = false;
 	private int coreIndex;
@@ -15,11 +15,11 @@ public class CPUCore extends Thread {
 		coreIndex = aCoreIndex;
 	}
 
-	synchronized public void assignProcess(ProcessControlBlock aPCB) {
+	synchronized public void assignProcess(Process aPCB) {
 		this.assignedPCB = aPCB;
 	}
 	
-	public ProcessControlBlock assignedProcess() {
+	public Process assignedProcess() {
 		return assignedPCB;
 	}
 	

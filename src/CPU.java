@@ -33,6 +33,13 @@ public class CPU {
 			aCore.start();
 		}
 	}
+
+	/**
+	 * this will run the CPU/scheduling al
+	 * */
+	public void run() {
+
+	}
 	
 	public String cpuID() {
 		return _cpuID;

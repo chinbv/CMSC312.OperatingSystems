@@ -1,3 +1,4 @@
+
 //max waiting time for IO = 50
 import java.util.Random;
 public class IO {

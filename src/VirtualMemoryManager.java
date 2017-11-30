@@ -32,7 +32,7 @@ public class VirtualMemoryManager {
         }
         
         
-        public VMPageInfo allocate(ProcessControlBlock aProcess, long allocationAmount)
+        public VMPageInfo allocate(Process aProcess, long allocationAmount)
         {
         	long nextFreeMemoryBlock = nextFreeMemoryBlockOfSize(allocationAmount);
 
@@ -87,3 +87,4 @@ public class VirtualMemoryManager {
 
 
 }
+

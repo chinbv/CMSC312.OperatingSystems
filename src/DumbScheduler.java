@@ -23,9 +23,9 @@ public class DumbScheduler {
 	
 	private static ProcessManager _processManager = Weeboo.processManager();
 	
-	public ArrayList<ProcessControlBlock> readyQueue;
-	public ArrayList<ProcessControlBlock> waitingQueue;
-	public ArrayList<ProcessControlBlock> runningQueue;
+	public ArrayList<Process> readyQueue;
+	public ArrayList<Process> waitingQueue;
+	public ArrayList<Process> runningQueue;
 	
 	public DumbScheduler() {
 		
@@ -33,18 +33,18 @@ public class DumbScheduler {
 	
 	
 	public void schedule() {
-		ArrayList<ProcessControlBlock> readyQueue = _processManager.readyQueue();
-		ArrayList<CPUCore> allCores = Weeboo.allCores();
-		
-		Iterator<CPUCore> coreIterator = allCores.iterator();
-		while( coreIterator.hasNext()) {
-			CPUCore aCore = coreIterator.next();
-			
-			ProcessControlBlock previouslyAssignedPCB = aCore.assignedProcess();
-			if( previouslyAssignedPCB != null) {
-				
-			}
-		}
+		ArrayList<Process> readyQueue = _processManager.readyQueue();
+//		ArrayList<CPUCore> allCores = Weeboo.allCores();
+//
+//		Iterator<CPUCore> coreIterator = allCores.iterator();
+//		while( coreIterator.hasNext()) {
+//			CPUCore aCore = coreIterator.next();
+//
+//			Process previouslyAssignedPCB = aCore.assignedProcess();
+//			if( previouslyAssignedPCB != null) {
+//
+//			}
+//		}
 	}
 	
 	/*
