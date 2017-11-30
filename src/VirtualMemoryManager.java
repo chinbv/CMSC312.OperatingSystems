@@ -52,26 +52,30 @@ public class VirtualMemoryManager {
 			return _currentFreeMemory;
 		}
         
+//        
+//        private void swapping() {
+//        	if(_currentFreeMemory<=0) {
+//        		swapIntoPageFile();
+//        	}
+//        }
+//        
+//        private void swapIntoPageFile() {
+//        	VMPageInfo pageSwappedIn;
+////        	pageFileMap.put(hashMapKey, pageSwappedIn);//process is put into the page file map
+//        	_currentFreeMemory--;
+//        	memoryUsed++;
+//        	
+//        }
+//        
+//        private VMPageInfo swapOutOfPageFile() {
+//        	VMPageInfo pageSwappedOut = (VMPageInfo) pageFileMap.get(hashMapKey);
+//        	_currentFreeMemory++;
+//        	memoryUsed--;
+//        	return pageSwappedOut;
+//        }
         
-        private void swapping() {
-        	if(_currentFreeMemory<=0) {
-        		swapIntoPageFile();
-        	}
-        }
-        
-        private void swapIntoPageFile() {
-        	VMPageInfo pageSwappedIn;
-//        	pageFileMap.put(hashMapKey, pageSwappedIn);//process is put into the page file map
-        	_currentFreeMemory--;
-        	memoryUsed++;
+        public void pageOut() {
         	
-        }
-        
-        private VMPageInfo swapOutOfPageFile() {
-        	VMPageInfo pageSwappedOut = (VMPageInfo) pageFileMap.get(hashMapKey);
-        	_currentFreeMemory++;
-        	memoryUsed--;
-        	return pageSwappedOut;
         }
 
         public long dealloc(long value)
