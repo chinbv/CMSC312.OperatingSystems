@@ -21,7 +21,6 @@ public class ProcessManager {
 
 	public ProcessControlBlock createProcessControlBlock(Path path) throws IOException {
 
-		int[] memoryBlock;
 		String executableFilename = "";
 
 		Path executablePath = FileSystems.getDefault().getPath(executableFilename);
@@ -35,7 +34,9 @@ public class ProcessManager {
 		// stat call using file managment system to get size of file
 		long fileSize = Files.size(executablePath);
 		// buffered reader
-		memoryBlock = Weeboo.memoryManager().allocate(fileSize);
+		newPCB.allocateMemory(fileSize);
+		
+        
 		// System.out.println("Max Size: " +
 		// Weeboo.memoryManager().maxMemorySize + " CFMS: "
 		// + Weeboo.memoryManager().currentFreeMemorySize);

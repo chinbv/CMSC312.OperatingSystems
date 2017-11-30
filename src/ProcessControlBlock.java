@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 
 public class ProcessControlBlock {
@@ -10,7 +11,8 @@ public class ProcessControlBlock {
 	private int _processID;
 	private int _priority;
 //	String executableName;
-	processState currentState;
+	processState _currentState;
+	ArrayList<VMPageInfo> _memoryAllocations;
 	
 	scriptCommands currentScript;
 	
@@ -53,11 +55,11 @@ public class ProcessControlBlock {
 //	}
 //	
 	public processState getProcessState() {
-		return currentState;
+		return _currentState;
 	}
 	
 	public void setProcessState(processState currentState) {
-		this.currentState = currentState;
+		this._currentState = currentState;
 	}
 
 	
@@ -65,7 +67,7 @@ public class ProcessControlBlock {
 		//States: NEW(1), READY(2), RUN(3), WAIT(4), EXIT(5)
 
 		String returnString = null;
-		switch(currentState) {
+		switch(_currentState) {
 		case NEW:  returnString = "NEW";
 		break;
 		
@@ -142,7 +144,20 @@ public class ProcessControlBlock {
 		this._processID = id;
 		this._priority = priority;
 //		this.executableName = executableName;
-		this.currentState = processState.NEW;
+		this._currentState = processState.NEW;
+		this._memoryAllocations = new ArrayList<VMPageInfo>();
+		
+	}
+	
+	public boolean allocateMemory(long amount) {
+		VMPageInfo newPage = Weeboo.memoryManager().allocate(this, amount);
+		
+		if( newPage != null ) {
+			_memoryAllocations.add(newPage);
+			return true;
+		}
+		// else
+		return false;
 		
 	}
 	
