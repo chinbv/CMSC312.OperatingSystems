@@ -1,66 +1,71 @@
-//public class VMM {
-//
-//        private final static int maxMemorySize = 256; //kb
-//        private static int currentFreeMemory = maxMemorySize;
-//        private static int memoryUsed = 0;
-//
-//        public int getCurrFreeMemory()
-//        {
-//            return currentFreeMemory;
-//        }
-//        public int getMemoryUsed()
-//        {
-//            return memoryUsed;
-//        }
-//        public int getmaxMemory()
-//        {
-//            return maxMemorySize;
-//        }
-//        public int increaseMemoryUsed(int x)
-//        {
-//            currentFreeMemory -= x;
-//            memoryUsed += x;
-//            return memoryUsed;
-//        }
-//
-//        public int decreaseMemoryUsed(int x)
-//        {
-//            currentFreeMemory + value;
-//            memoryUsed -= value;
-//            if (memoryUsed < 0)
-//            {
-//                memoryUsed = 0;
-//            }
-//            return memoryUsed;
-//        }
-//
-//
-//}
-
-/**
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class VirtualMemoryManager {
 
-	long maxMemorySize = 4096;
+        private final static long maxMemorySize = 4096;
+        private static long _currentFreeMemory = maxMemorySize;
+        private static long memoryUsed = 0;
+        private ArrayList<VMPageInfo> _allocatedPagesList = null;
+        private int hashMapKey = 0;
+        
+        public VirtualMemoryManager() {
+        	_allocatedPagesList = new ArrayList<VMPageInfo>();
+        	
+        }
+        
+        
+        
+        public long getCurrFreeMemory()
+        {
+            return _currentFreeMemory;
+        }
+        public long getMemoryUsed()
+        {
+            return memoryUsed;
+        }
+        public long getmaxMemory()
+        {
+            return maxMemorySize;
+        }
+        
+        
+        public VMPageInfo allocate(Process aProcess, long allocationAmount)
+        {
+        	long nextFreeMemoryBlock = nextFreeMemoryBlockOfSize(allocationAmount);
 
+        	VMPageInfo newPageAssignment = new VMPageInfo(0x0, nextFreeMemoryBlock, aProcess);
+        	
+            _currentFreeMemory -= allocationAmount;
+            memoryUsed += allocationAmount;
+            
+        	_allocatedPagesList.add(newPageAssignment);
 
-	long currentFreeMemorySize = maxMemorySize;
-	int[] allocatedMemoryArray;
-
-	public int[] allocation(long size) {
-
-		if(size <= currentFreeMemorySize) {
-			currentFreeMemorySize = currentFreeMemorySize - size;
-			int[] allocatedMemoryArray = new int[(int) size];
-		} else {
-			System.out.println("Error: Not enough memory available");
+            return newPageAssignment;
+        }
+        
+        private long nextFreeMemoryBlockOfSize(long allocationAmount) {
+        	//TODO this has to be done for real
+        	
+			return _currentFreeMemory;
 		}
-		return allocatedMemoryArray;
-	}
+        
+        private void PageFile() {
+        	HashMap pageFile = new HashMap();
+        	
+        }
 
-	public void free(int[] allocation, int size) {
-		currentFreeMemorySize = currentFreeMemorySize + size;
-	}
+        public long dealloc(long value)
+        {
+            _currentFreeMemory += value;
+            memoryUsed -= value;
+            if (memoryUsed < 0)
+            {
+                memoryUsed = 0;
+            }
+            return memoryUsed;
+        }
+
 
 }
-**/
+

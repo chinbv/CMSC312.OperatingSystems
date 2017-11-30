@@ -9,17 +9,21 @@ public class ProcessOperation {
 
     public ProcessOperation(String line, Process p) {
         this.parentProcess = p;
-
+        // System.out.println("command form file" + line);
         Scanner readLine = new Scanner(line);
-        String command = readLine.next();
+        String command = readLine.next().toUpperCase();
         Random randomNum = new Random();
+        int CalcRunTime = 0;
+        if(readLine.hasNext()){
+             CalcRunTime = readLine.nextInt();
+        }
 
         switch (command) {
             case "CALCULATE":
                 opType = OperationType.CALCULATE;
-                runTime = readLine.nextInt();
+                runTime = CalcRunTime;
                 break;
-            case "I/O":
+            case "IO":
                 opType = OperationType.IO;
                 runTime = randomNum.nextInt(50) + 1;
                 break;
@@ -33,6 +37,8 @@ public class ProcessOperation {
             default:
                 opType = null;
         }
+
+        System.out.println(getOpType());
     }
 
     public OperationType getOpType() {

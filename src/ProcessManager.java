@@ -19,12 +19,14 @@ public class ProcessManager {
 		listOfProcesses = new ArrayList<>();
 	}
 
+
 	public void createProcess(String process_file, int cyclesNum){
 		Process newProcess = new Process(process_file, cyclesNum, nextAvailableProcessId(), assigningPriority());
 		listOfProcesses.add(newProcess);
 		// load process into memory here
 		//Brandon's code. Is this
 		int[] memoryBlock;
+
 		String executableFilename = "";
 		try {
 			Path executablePath = FileSystems.getDefault().getPath(executableFilename);
@@ -35,9 +37,8 @@ public class ProcessManager {
 			// memoryBlock = Weeboo.memoryManager().allocate(fileSize);
 		} catch(Exception e) {
 			e.printStackTrace();
+
 		}
-
-
 
 		newProcess.setProcessState(ProcessState.READY);
 

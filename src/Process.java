@@ -20,6 +20,7 @@ public class Process {
 	private ArrayList<ProcessOperation> processOperations;
 	private int numOfCycles;
 	private ProcessState processState;
+	ArrayList<VMPageInfo> _memoryAllocations;
 
 	public Process(String processFile, int cycleNum, int pid, int priority) {
 		this.processName = processFile.substring(0,processFile.indexOf("."));
@@ -41,7 +42,7 @@ public class Process {
 		try{
 			Scanner processLine = new Scanner(new File(processFile));
 			while (processLine.hasNextLine()) {
-				processOperations.add(new ProcessOperation(processLine.next(), this));
+				processOperations.add(new ProcessOperation(processLine.nextLine(), this));
 
 			}
 		}catch (Exception e) {
@@ -66,6 +67,18 @@ public class Process {
 			int something = 2;
 			something *= something;
 		}
+
+	}
+
+	public boolean allocateMemory(long amount) {
+		VMPageInfo newPage = Weeboo.memoryManager().allocate(this, amount);
+
+		if( newPage != null ) {
+			_memoryAllocations.add(newPage);
+			return true;
+		}
+		// else
+		return false;
 
 	}
 

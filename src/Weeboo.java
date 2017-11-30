@@ -10,7 +10,7 @@ public class Weeboo {
 
 	int processIdCounter = 1;
 
-//	private static VirtualMemoryManager _memoryManager = new VirtualMemoryManager();
+	private static VirtualMemoryManager _memoryManager = new VirtualMemoryManager();
 	private static ProcessManager _processManager = new ProcessManager();
 
 
@@ -79,9 +79,9 @@ public class Weeboo {
 	/**
 	 * @return the memoryManager
 	 */
-//	public static VirtualMemoryManager memoryManager() {
-//		return _memoryManager;
-//	}
+	public static VirtualMemoryManager memoryManager() {
+		return _memoryManager;
+	}
 
 	/**
 	 * @return the processManager
