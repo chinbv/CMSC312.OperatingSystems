@@ -8,7 +8,6 @@ public class ProcessOperation {
     private int runTime;
 
     public ProcessOperation(String line) {
-        // System.out.println("command form file" + line);
         Scanner readLine = new Scanner(line);
         String command = readLine.next().toUpperCase();
         Random randomNum = new Random();

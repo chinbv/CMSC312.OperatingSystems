@@ -13,7 +13,7 @@ public class FIFOScheduler  implements OSScheduler{
 
 
     public FIFOScheduler() {
-
+        ffQueue = new ArrayList<>();
     }
 
     @Override
@@ -21,8 +21,10 @@ public class FIFOScheduler  implements OSScheduler{
 
         allCores = Weeboo.allCores();
 
-        //System.out.println("QUEUEUEUEUEUEUE b4 PROCESSES HAVE BEEN ASSIGNED TO CORRESS" + ffQueue.size());
+        System.out.println("QUEUEUEUEUEUEUE b4 PROCESSES HAVE BEEN ASSIGNED TO CORRESS" + ffQueue.size());
+
         ffQueue = coreHelperArrayL(Weeboo.processManager().readyQueue());
+
 
         System.out.println("QUEUEUEUEUEUEUE AFTER PROCESSES HAVE BEEN ASSIGNED TO CORRESS" + ffQueue.size());
 
