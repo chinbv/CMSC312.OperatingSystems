@@ -9,7 +9,7 @@ import java.util.Iterator;
 public class ProcessManager {
 
 	private ArrayList<ProcessControlBlock> listOfProcesses;
-	int lastAssignedProcessId = 1;
+	int lastAssignedProcessId = 0;
 	int processPriority = 0;
 	private static Object _schedulerLock = null;
 	

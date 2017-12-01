@@ -50,7 +50,7 @@ public class Weeboo {
 		
 		// initialize CPUs
 		System.out.print("Initializing CPUs$ " + "\n");
-		System.out.println("reaches here");
+
 		cpuArray = new ArrayList<CPU>();
 
 		for( int cpuCounter = 0; cpuCounter < numberOfCPUs; cpuCounter++ ) {
@@ -152,7 +152,7 @@ public class Weeboo {
 			while(readJobFile.hasNextLine()) {
 				ArrayList<String> elementsEntered = new ArrayList<>();
 				String command = readJobFile.next();
-				System.out.println(command);
+				System.out.println("command read in: " + command);
 				if(command.toUpperCase().equals("LOAD")) {
 					int cycleNum = readJobFile.nextInt();
 					String processFile = readJobFile.next();
@@ -172,7 +172,7 @@ public class Weeboo {
 			e.printStackTrace();
 		}
 
-		System.out.println(simulationJobs.keySet() + "\t " +simulationJobs.values());
+		System.out.println("simulationJobs " +simulationJobs.keySet() + "\t " +simulationJobs.values());
 
 	}
 
@@ -182,7 +182,7 @@ public class Weeboo {
 	}
 	
 	public static void kernelPanic(String customMessage) {
-		System.out.println(customMessage);
+		System.out.println("kernel message " + customMessage);
 		
 		// should simulate a kernel panic and stop
 		return;
@@ -200,7 +200,7 @@ public class Weeboo {
 	 * @return the processManager
 	 */
 	public static ProcessManager processManager() {
-		System.out.println("reaches here");
+
 		return _processManager;
 	}
 

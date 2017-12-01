@@ -19,8 +19,14 @@ public class Scheduler
     //and will assign processes to the core(s)
     public void initializeScheduler(ArrayList<ProcessControlBlock> q) {
         allCores = Weeboo.allCores();
-        ffQueue = coreHelperArrayL(fifo(q));
-        System.out.println("sdlfjsldjfsdkf");
+
+        sjQueue = coreHelperArrayL(shortestJobScheduling(q));
+        System.out.println("____________________________________________SHORTEST JOB");
+
+        for (int i = 0; i<sjQueue.size();i++)
+        {
+            System.out.print(sjQueue.get(i).processID());
+        }
     }
 
     //
