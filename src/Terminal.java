@@ -100,7 +100,7 @@ public class Terminal {
                     int cycleNum = readJobFile.nextInt();
                     String processFile = readJobFile.next();
                     System.out.println("read job file " + processFile + " " + cycleNum);
-                    Weeboo.loadSimulationJobFile(processFile, cycleNum);
+                    //Weeboo.loadSimulationJobFile(processFile, cycleNum);
                 }
             }
         } catch (Exception e) {
@@ -110,7 +110,7 @@ public class Terminal {
     }
 
     public void mem(){
-        System.out.println("Memory: "+ Weeboo.memoryManager().getMemoryUsed() + "/" + Weeboo.memoryManager().getmaxMemory());
+        System.out.println("Memory: "+ Weeboo.memoryManager().memoryUsed() + "/" + Weeboo.memoryManager().physicalMemorySize());
     }
 
     public void reset() {

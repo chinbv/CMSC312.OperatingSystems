@@ -59,7 +59,9 @@ public class Weeboo {
 			newCPU.initialize();
 		}
 
-		launchTerminal();
+		//launchTerminal();
+		// needs to load the job file manually instead of terminal
+		loadSimulationJobFile("");
 		System.out.println("Continues past terminal");
 		//main loop
 
@@ -139,8 +141,9 @@ public class Weeboo {
 		
 	}
 	
-	public static void loadSimulationJobFile(String jobFileName, int cycleTime) {
+	public static void loadSimulationJobFile(String jobFileName) {
 
+		/*
 		if (simulationJobs.containsKey(cycleTime)) {
 			ArrayList<String> existingCycleTime = simulationJobs.get(cycleTime);
 			existingCycleTime.add(jobFileName);
@@ -151,12 +154,33 @@ public class Weeboo {
 			simulationJobs.put(cycleTime, newCycleTime);
 		}
 		System.out.println(simulationJobs.keySet() + "\t " +simulationJobs.values());
+		*/
+		
+		
+		// example setup, should be read in from file
+		ArrayList<String>jobsArray1 = new ArrayList<String>();
+		jobsArray1.add("executable1");
+		simulationJobs.put(3, jobsArray1);
+		
+		ArrayList<String>jobsArray2 = new ArrayList<String>();
+		jobsArray2.add("executable2");
+		simulationJobs.put(7, jobsArray2);
+		
+		simulationJobs.put(12, jobsArray1);
+		
 	}
 
 	public static void launchTerminal(){
 		terminal = new Terminal();
 		terminal.initializeTerminal();
 	}
+	
+	public static void kernelPanic(String customMessage) {
+		System.out.println(customMessage);
+		
+		// should simulate a kernel panic and stop
+		return;
+	}	
 	
 	
 	/**
