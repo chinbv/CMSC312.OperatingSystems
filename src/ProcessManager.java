@@ -87,12 +87,14 @@ public class ProcessManager {
 	
 
 	public void dumpProcessArrayContents() {
-		System.out.println("should print PCB info now");
 		Iterator<ProcessControlBlock> processListIterator = listOfProcesses.iterator();
+		if (processListIterator.hasNext() == false) {
+			System.out.println("No unfinished processes.");
+		}
 		while(processListIterator.hasNext() == true) {
 			ProcessControlBlock aProcess = processListIterator.next();
-			
-			System.out.println("PID: " + aProcess.processID() + " Priority: " + aProcess.priority() + " State: " + aProcess.stringForProcessState());
+
+			aProcess.getProcessPCBInfo();
 		}
 	}
 

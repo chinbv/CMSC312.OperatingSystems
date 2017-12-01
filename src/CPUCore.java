@@ -40,8 +40,7 @@ public class CPUCore extends Thread {
 					
 					if( assignedPCB != null ) {
 						System.out.println(parentCPU.cpuID() + ":" + coreIndex + " executing tick");
-
-						
+						System.out.println(assignedPCB.getProcessName() + " boolean: "+(assignedPCB == null));
 						
 						assignedPCB.executeTick();
 					} else {
