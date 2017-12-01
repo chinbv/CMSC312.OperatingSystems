@@ -160,6 +160,19 @@ public class Weeboo {
 		// create dictionary of jobs
 		
 //		Path testFile1 = Paths.get(nameOfFile);
+		
+		
+		// example setup, should be read in from file
+		ArrayList<String>jobsArray1 = new ArrayList<String>();
+		jobsArray1.add("executable1");
+		simulationJobs.put(3, jobsArray1);
+		
+		ArrayList<String>jobsArray2 = new ArrayList<String>();
+		jobsArray2.add("executable2");
+		simulationJobs.put(7, jobsArray2);
+		
+		simulationJobs.put(12, jobsArray1);
+		
 
 	}
 	
