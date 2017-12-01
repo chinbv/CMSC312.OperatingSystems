@@ -1,40 +1,48 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 public class ProcessControlBlock {
-	
-	private int _processID;
-	private int _priority;
-//	String executableName;
-	processState _currentState;
-	ArrayList<VMPageInfo> _memoryAllocations;
-	private int simulationJobTicksRemaining;	// for simulation purposes, how long to run
-	
-	scriptCommands currentScript;
-	
+
 	public enum processState {
 		NEW, READY, RUN, WAIT, EXIT;
 	};
-	
+
 	public enum scriptCommands {
 		CALCULATE, IO, YIELD, OUT;
 	};
+
+	private int _processID;
+	private int _priority;
+	private int remainingBurstTime;
+	private int burstTime;
+	processState _currentState;
+	ArrayList<VMPageInfo> _memoryAllocations;
+	private int simulationJobTicksRemaining;	// for simulation purposes, how long to run
+	public ArrayList<ProcessOperation> processOperations;
+
+	scriptCommands currentScript;
+
+	public ProcessControlBlock(int id, int priority) {
+
+		this._processID = id;
+		this._priority = priority;
+		this.remainingBurstTime = 0;
+		this.burstTime = 0;
+		this._currentState = processState.NEW;
+		this._memoryAllocations = new ArrayList<VMPageInfo>();
+		this.processOperations = new ArrayList<>();
+	}
 	
-	/**
-	 * @return the id
-	 */
+
+	
+
 	public int processID() {
 		return _processID;
 	}
 
-	/**
-	 * @param id the id to set
-	 */
 	public void setId(int id) {
 		this._processID = id;
 	}
@@ -46,15 +54,7 @@ public class ProcessControlBlock {
 	public void setPriority(int priority) {
 		this._priority = priority;
 	}
-	
-//	public String getName() {
-//		return executableName;
-//	}
-//	
-//	public void setName(String executableName) {
-//		this.executableName = executableName;
-//	}
-//	
+
 	public processState getProcessState() {
 		return _currentState;
 	}
@@ -66,71 +66,33 @@ public class ProcessControlBlock {
 		simulationJobTicksRemaining = 5;
 	}
 
-	
-	public String stringForProcessState() {
-		//States: NEW(1), READY(2), RUN(3), WAIT(4), EXIT(5)
-
-		String returnString = null;
-		switch(_currentState) {
-		case NEW:  returnString = "NEW";
-		break;
-		
-		case READY: returnString = "READY";
-		break;
-		
-		case RUN: returnString = "RUN";
-		break;
-		
-		case WAIT: returnString = "WAIT";//Blocked
-		break;
-		
-		case EXIT: returnString = "EXIT";
-		break;
-		
-		default: returnString = "Unknown";
-		break;
+	public void calculateBurstTime() {
+		for (int i = 0; i < processOperations.size(); i++) {
+			if(processOperations.get(i).getOpType() == scriptCommands.CALCULATE) {
+				burstTime += processOperations.get(i).getRunTime();
+			}
 		}
-		return returnString;
+		this.remainingBurstTime = burstTime;
+	}
+
+	public int getRemainingBurstTime() {
+		return this.remainingBurstTime;
+	}
+
+	public void setRemainingBurstTime(int rbt) {
+		this.remainingBurstTime = rbt;
+	}
+
+	public int getBurstTime() {
+		return this.burstTime;
 	}
 	
-	public String stringScriptOfOperations() {
-		//States: Calculate(1), I/O(2), Yield(3), OUT(4)
-
-		String returnString = null;
-		switch(currentScript) {
-		case CALCULATE:  returnString = "RUN";
-		break;
-		
-		case IO: returnString = "WAIT";//Blocked
-		break;
-		
-		case YIELD: returnString = "INTERRUPT";//INTERRUPT, state needs to be written
-		break;
-		
-		case OUT: returnString = "NEEDS TO BE LIKE PROC";//NEEDS TO BE FINISHED
-		break;
-		
-		default: returnString = "Unknown";
-		break;
+	public void loadExecutable(String fileName) throws IOException {
+		Scanner processLine = new Scanner(new File(fileName));
+		while (processLine.hasNextLine()) {
+			processOperations.add(new ProcessOperation(processLine.nextLine()));
 		}
-		return returnString;
-	}
-	
-	public void loadExecutable(Path executablePath) throws IOException {
-		
-	
-		/*
-		BufferedReader fileReader = new BufferedReader(new FileReader(aFilename));
-		String line = null;
-		while ((line = fileReader.readLine()) != null) {
-			System.out.println(line);
-		}
-		*/
-		
-		
-		// for the moment, do nothing
-		return;
-		
+		calculateBurstTime();
 	}
 	
 	synchronized public void executeTick() {
@@ -149,18 +111,6 @@ public class ProcessControlBlock {
 		
 	}
 
-//	
-	
-	public ProcessControlBlock(int id, int priority) {
-		
-		this._processID = id;
-		this._priority = priority;
-//		this.executableName = executableName;
-		this._currentState = processState.NEW;
-		this._memoryAllocations = new ArrayList<VMPageInfo>();
-		
-	}
-	
 	public boolean allocateMemory(long amount) {
 		VMPageInfo newPage = Weeboo.memoryManager().allocate(this, amount);
 		
@@ -171,6 +121,55 @@ public class ProcessControlBlock {
 		// else
 		return false;
 		
+	}
+
+	public String stringForProcessState() {
+		//States: NEW(1), READY(2), RUN(3), WAIT(4), EXIT(5)
+
+		String returnString = null;
+		switch(_currentState) {
+			case NEW:  returnString = "NEW";
+				break;
+
+			case READY: returnString = "READY";
+				break;
+
+			case RUN: returnString = "RUN";
+				break;
+
+			case WAIT: returnString = "WAIT";//Blocked
+				break;
+
+			case EXIT: returnString = "EXIT";
+				break;
+
+			default: returnString = "Unknown";
+				break;
+		}
+		return returnString;
+	}
+
+	public String stringScriptOfOperations() {
+		//States: Calculate(1), I/O(2), Yield(3), OUT(4)
+
+		String returnString = null;
+		switch(currentScript) {
+			case CALCULATE:  returnString = "RUN";
+				break;
+
+			case IO: returnString = "WAIT";//Blocked
+				break;
+
+			case YIELD: returnString = "INTERRUPT";//INTERRUPT, state needs to be written
+				break;
+
+			case OUT: returnString = "NEEDS TO BE LIKE PROC";//NEEDS TO BE FINISHED
+				break;
+
+			default: returnString = "Unknown";
+				break;
+		}
+		return returnString;
 	}
 	
 }

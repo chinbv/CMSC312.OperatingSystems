@@ -40,14 +40,8 @@ public class Terminal {
                 System.out.println("LOAD entered");
                 commandEntered = "LOAD";
                 String fileName = "";
-                int cycleNum = 0;
-                if (elementsEntered.size() == 2) {
-                    cycleNum = Integer.parseInt(elementsEntered.get(0));
-                    fileName = elementsEntered.get(1);
-                } else if(elementsEntered.size() == 1) {
-                    fileName = elementsEntered.get(0);
-                }
-                load(fileName, cycleNum);
+                fileName = elementsEntered.get(0);
+                load(fileName);
                 break;
             case "EXE":
                 System.out.println("EXE entered");
@@ -88,25 +82,8 @@ public class Terminal {
         }
     }
 
-    public void  load(String file, int cycle) {
-
-        try {
-            Scanner readJobFile = new Scanner(new File(file));
-            while(readJobFile.hasNextLine()) {
-                ArrayList<String> elementsEntered = new ArrayList<>();
-                String command = readJobFile.next();
-                System.out.println(command);
-                if(command.toUpperCase().equals("LOAD")) {
-                    int cycleNum = readJobFile.nextInt();
-                    String processFile = readJobFile.next();
-                    System.out.println("read job file " + processFile + " " + cycleNum);
-                    Weeboo.loadSimulationJobFile(processFile, cycleNum);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+    public void  load(String file) {
+        Weeboo.loadSimulationJobFile(file);
     }
 
     public void mem(){

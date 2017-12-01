@@ -20,7 +20,8 @@ public class Weeboo {
 	
 	private static VirtualMemoryManager _memoryManager = new VirtualMemoryManager();
 	private static ProcessManager _processManager = new ProcessManager();
-	private static DumbScheduler _systemScheduler = new DumbScheduler();
+//	private static DumbScheduler _systemScheduler = new DumbScheduler();
+	private static Scheduler _systemScheduler = new Scheduler();
 	private static Terminal terminal;
 	private static ArrayList<CPU> cpuArray = null;
 
@@ -49,8 +50,9 @@ public class Weeboo {
 		
 		// initialize CPUs
 		System.out.print("Initializing CPUs$ " + "\n");
-
+		System.out.println("reaches here");
 		cpuArray = new ArrayList<CPU>();
+
 		for( int cpuCounter = 0; cpuCounter < numberOfCPUs; cpuCounter++ ) {
 //			System.out.print("CPU: " + cpuCounter + "\n");
 
@@ -59,7 +61,8 @@ public class Weeboo {
 			newCPU.initialize();
 		}
 
-		launchTerminal();
+//		launchTerminal();
+//		loadSimulationJobFile(" ");
 		System.out.println("Continues past terminal");
 		//main loop
 
@@ -72,7 +75,7 @@ public class Weeboo {
 
 
 			// schedule processes
-			_systemScheduler.schedule();
+			_systemScheduler.initializeScheduler(processManager().readyQueue());
 			
 			//execute a process (calculate)
 			// tell each core to execute a tick
@@ -102,7 +105,6 @@ public class Weeboo {
 	}
 
 	private static void checkForSimulationAction() throws IOException {
-
 		// should consult collection of jobs for any actions to be performed
 		System.out.println("checking for jobs for tick " + osClockTick);
 		ArrayList<String>jobsForTick = simulationJobs.get(osClockTick);
@@ -139,17 +141,35 @@ public class Weeboo {
 		
 	}
 	
-	public static void loadSimulationJobFile(String jobFileName, int cycleTime) {
+	public static void loadSimulationJobFile(String jobFileName) {
 
-		if (simulationJobs.containsKey(cycleTime)) {
-			ArrayList<String> existingCycleTime = simulationJobs.get(cycleTime);
-			existingCycleTime.add(jobFileName);
-			simulationJobs.put(cycleTime, existingCycleTime);
-		} else {
-			ArrayList<String> newCycleTime = new ArrayList<String>();
-			newCycleTime.add(jobFileName);
-			simulationJobs.put(cycleTime, newCycleTime);
+//		jobFileName = "TestFile1.txt";
+		try {
+			Scanner readJobFile = new Scanner(new File(jobFileName));
+			while(readJobFile.hasNextLine()) {
+				ArrayList<String> elementsEntered = new ArrayList<>();
+				String command = readJobFile.next();
+				System.out.println(command);
+				if(command.toUpperCase().equals("LOAD")) {
+					int cycleNum = readJobFile.nextInt();
+					String processFile = readJobFile.next();
+					System.out.println("read job file " + processFile + " " + cycleNum);
+					if (simulationJobs.containsKey(cycleNum)) {
+						ArrayList<String> existingCycleTime = simulationJobs.get(cycleNum);
+						existingCycleTime.add(jobFileName);
+						simulationJobs.put(cycleNum, existingCycleTime);
+					} else {
+						ArrayList<String> newCycleTime = new ArrayList<String>();
+						newCycleTime.add(jobFileName);
+						simulationJobs.put(cycleNum, newCycleTime);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
+
 		System.out.println(simulationJobs.keySet() + "\t " +simulationJobs.values());
 	}
 

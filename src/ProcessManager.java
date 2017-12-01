@@ -44,7 +44,7 @@ public class ProcessManager {
 
 		// allocate memory for the process
 		newPCB.allocateMemory(fileSize);
-		newPCB.loadExecutable(executablePath);
+		newPCB.loadExecutable(pathString);
    
 		listOfProcesses.add(newPCB);
 		
