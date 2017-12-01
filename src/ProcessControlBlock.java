@@ -1,6 +1,7 @@
 import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 
@@ -11,7 +12,7 @@ public class ProcessControlBlock {
 	};
 
 	public enum scriptCommands {
-		CALCULATE, IO, YIELD, OUT;
+		CALCULATE, IO, YIELD, OUT, EXE;
 	};
 
 	private int _processID;
@@ -23,6 +24,7 @@ public class ProcessControlBlock {
 	ArrayList<VMPageInfo> _memoryAllocations;
 	private int simulationJobTicksRemaining;	// for simulation purposes, how long to run
 	public ArrayList<ProcessOperation> processOperations;
+	private int lastCommandReadIndex;
 
 	scriptCommands currentScript;
 
@@ -33,6 +35,7 @@ public class ProcessControlBlock {
 		this.remainingBurstTime = 0;
 		this.burstTime = 0;
 		this.processName = "";
+		lastCommandReadIndex = -1;
 		this._currentState = processState.NEW;
 		this._memoryAllocations = new ArrayList<VMPageInfo>();
 		this.processOperations = new ArrayList<>();
@@ -64,9 +67,6 @@ public class ProcessControlBlock {
 	
 	public void setProcessState(processState currentState) {
 		this._currentState = currentState;
-		
-		// for simulation
-		simulationJobTicksRemaining = 5;
 	}
 
 	public void calculateBurstTime() {
@@ -76,6 +76,8 @@ public class ProcessControlBlock {
 			}
 		}
 		this.remainingBurstTime = burstTime;
+		this.simulationJobTicksRemaining = remainingBurstTime;
+
 	}
 
 	public int getRemainingBurstTime() {
@@ -107,14 +109,38 @@ public class ProcessControlBlock {
 		Weeboo.memoryManager().swapInProcess(this);
 		
 		System.out.println("executing process ID: " + _processID);
-		
+
+		ProcessOperation op = processOperations.get(lastCommandReadIndex + 1);
+		Random randomNum = new Random();
 		// script command
+		switch (op.getOpType()) {
+			case CALCULATE:
+				int decrementTime = op.getRunTime() -1;
+				op.setRunTime(decrementTime);
+				if (op.getRunTime() == 0) {
+					lastCommandReadIndex++;
+				}
+				break;
+			case IO:
+				// IO Interrupt
+				this.setProcessState(processState.WAIT);
+				int ioTime = randomNum.nextInt(50) + 1;
+				break;
+			case YIELD:
+				break;
+			case OUT:
+				this.processPCBInfo();
+				break;
+			case EXE:
+				this.setProcessState(processState.EXIT);
+				break;
+		}
 		
 		simulationJobTicksRemaining--;
 		if( simulationJobTicksRemaining == 0) {
-			this.setProcessState(ProcessControlBlock.processState.READY);
+			this.setProcessState(processState.EXIT);
 		}
-		
+
 	}
 
 	public boolean allocateMemory(long amount) {
@@ -131,6 +157,10 @@ public class ProcessControlBlock {
 	
 	public ArrayList<VMPageInfo> allMemoryPages() {
 		return _memoryAllocations;
+	}
+
+	public void processPCBInfo() {
+		System.out.println("");
 	}
 
 	public String stringForProcessState() {

@@ -33,6 +33,9 @@ public class ProcessOperation {
                 opType = ProcessControlBlock.scriptCommands.OUT;
                 System.out.println("Process info & PCB info");
                 break;
+            case "EXE":
+                opType = ProcessControlBlock.scriptCommands.EXE;
+                break;
             default:
                 opType = null;
         }
