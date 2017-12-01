@@ -23,6 +23,7 @@ public class ProcessManager {
 	public void createProcess(String process_file, int cyclesNum){
 		Process newProcess = new Process(process_file, cyclesNum, nextAvailableProcessId(), assigningPriority());
 		listOfProcesses.add(newProcess);
+
 		// load process into memory here
 		//Brandon's code. Is this
 		int[] memoryBlock;
@@ -92,7 +93,7 @@ public class ProcessManager {
 			if (p.getPriority() != 0) {
 				System.out.print("Priority: " + p.getPriority() + "\t");
 			}
-			System.out.print("Number of I/O bursts: " + p.getRemainingBurstTime() + "\t");
+			System.out.print("Number of I/O bursts: " + "haven't coded IO yet"+ "\t");
 		}
 	}
 

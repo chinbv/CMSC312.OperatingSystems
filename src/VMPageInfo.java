@@ -4,6 +4,7 @@ public class VMPageInfo {
 	
 	private long _pageAddress;
 	private long _physicalAddress;
+
 	private Process _assignedProcess;
 	private String _Free;
 

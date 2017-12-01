@@ -14,6 +14,10 @@ public class Process {
 	private int turnAroundTime;
 	private int remainingBurstTime;
 	private int startTime;
+	private int finishTime;
+	private int rwt;
+	private int sjwaitTime;
+	private int sjturnAroundTime;
 
 	private int roundWaitTime;
 	private int roundTurnAroundTime;
@@ -99,7 +103,7 @@ public class Process {
 	}
 
 	public int getPriority() {
-		return this.getPriority();
+		return this.priority;
 	}
 
 	public String getProcessName() { return this.processName; }
@@ -124,12 +128,16 @@ public class Process {
 		return this.roundWaitTime;
 	}
 
+	public ArrayList<ProcessOperation> getProcessOperations() {
+		return processOperations;
+	}
+
 	public int getRoundTurnAroundTime() {
 		return this.roundTurnAroundTime;
 	}
 
 	public void setWaitTime(int wt) {
-		this.waitTime = wt;
+		this.waitTime += wt;
 	}
 
 	public void setTurnAroundTime(int turnAt) {
@@ -150,14 +158,62 @@ public class Process {
 
 	public int getRemainingBurstTime() { return this.remainingBurstTime; }
 
-	public int getStartTime() {
+	public void setSJWaitTime(int wt) {
+		this.sjwaitTime += wt;
+	}
+
+	public void setSJTurnAroundTime(int turnAt) {
+		this.sjturnAroundTime = turnAt;
+	}
+	public int getSJStartTime() {
 		return this.startTime;
 	}
-	public void setStartTime(int st) {
+	public void setSJStartTime(int st) {
 		this.startTime = st;
 	}
 
-	public ArrayList<ProcessOperation> getProcessOperations() {
-		return processOperations;
+	public int getfStartTime() {
+		return this.startTime;
 	}
+	public void setfStartTime(int st) {
+		this.startTime = st;
+	}
+
+
+	public int getRStartTime() {
+		return this.startTime;
+	}
+	public void setRStartTime(int st) {
+		this.startTime = st;
+	}
+
+	public int getRFinishTime()
+	{
+		return this.finishTime;
+	}
+
+	public void setRFinishTime(int ft)
+	{
+		this.finishTime = ft;
+	}
+
+	public int getLastExecuted()
+	{
+		return this.finishTime;
+	}
+
+	public void setLastFinish(int ft)
+	{
+		this.finishTime = ft;
+	}
+
+	public void setroundHelp(int x)
+	{
+		rwt+=x;
+	}
+	public int getroundHelp()
+	{
+		return rwt;
+	}
+
 }

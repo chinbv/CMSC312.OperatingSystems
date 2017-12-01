@@ -8,6 +8,8 @@ public class VirtualMemoryManager {
         private static long memoryUsed = 0;
         private ArrayList<VMPageInfo> _allocatedPagesList = null;
         private int hashMapKey = 0;
+    	HashMap pageFileMap = new HashMap();
+
         
         public VirtualMemoryManager() {
         	_allocatedPagesList = new ArrayList<VMPageInfo>();
@@ -50,8 +52,29 @@ public class VirtualMemoryManager {
 			return _currentFreeMemory;
 		}
         
-        private void PageFile() {
-        	HashMap pageFile = new HashMap();
+//        
+//        private void swapping() {
+//        	if(_currentFreeMemory<=0) {
+//        		swapIntoPageFile();
+//        	}
+//        }
+//        
+//        private void swapIntoPageFile() {
+//        	VMPageInfo pageSwappedIn;
+////        	pageFileMap.put(hashMapKey, pageSwappedIn);//process is put into the page file map
+//        	_currentFreeMemory--;
+//        	memoryUsed++;
+//        	
+//        }
+//        
+//        private VMPageInfo swapOutOfPageFile() {
+//        	VMPageInfo pageSwappedOut = (VMPageInfo) pageFileMap.get(hashMapKey);
+//        	_currentFreeMemory++;
+//        	memoryUsed--;
+//        	return pageSwappedOut;
+//        }
+        
+        public void pageOut() {
         	
         }
 
