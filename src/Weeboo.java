@@ -85,11 +85,12 @@ public class Weeboo {
 			//exit
 			System.out.println("Time: " + osClockTick);
 			if(osClockTick == 100) {
-				
 				complete = true;
 			}
 			osClockTick++;
 		}
+		
+		// need to shut down cores (threads)
 		
 		System.out.println("Exiting");
 	}
