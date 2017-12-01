@@ -5,9 +5,11 @@ public class FIFOScheduler  implements OSScheduler{
 
     ArrayList<CPUCore> allCores = new ArrayList<CPUCore>();
     ProcessControlBlock previouslyAssignedPCB;
+    ArrayList<ProcessControlBlock> ffQueue;
     CPUCore aCore;
     ProcessControlBlock nextp;
-    public ArrayList<ProcessControlBlock> ffQueue = new ArrayList<>();
+    Iterator<CPUCore> coreIterator = allCores.iterator();
+
 
 
     public FIFOScheduler() {
@@ -16,31 +18,20 @@ public class FIFOScheduler  implements OSScheduler{
 
     @Override
     public void schedule() {
-        ArrayList<ProcessControlBlock> q = Weeboo.processManager().readyQueue();
+
         allCores = Weeboo.allCores();
 
-        ffQueue = coreHelperArrayL(fifo(q));
+        //System.out.println("QUEUEUEUEUEUEUE b4 PROCESSES HAVE BEEN ASSIGNED TO CORRESS" + ffQueue.size());
+        ffQueue = coreHelperArrayL(Weeboo.processManager().readyQueue());
+
+        System.out.println("QUEUEUEUEUEUEUE AFTER PROCESSES HAVE BEEN ASSIGNED TO CORRESS" + ffQueue.size());
+
     }
 
-    //
-    //
-    //FIRST IN FIRST OUT
-    //
-    //
-    public ArrayList<ProcessControlBlock> fifo(ArrayList<ProcessControlBlock> q)
-    {
-        return ffQueue = (ArrayList<ProcessControlBlock>) q.clone();
-    }
-
-    //
-    //
-    //ASSIGN CORES
-    //
-    //
     public ArrayList<ProcessControlBlock> coreHelperArrayL(ArrayList<ProcessControlBlock> q)
     {
-        Iterator<CPUCore> coreIterator = allCores.iterator();
-        while( coreIterator.hasNext()) {
+
+        while( coreIterator.hasNext() && q.isEmpty()!=true) {
             aCore = coreIterator.next();
             previouslyAssignedPCB = aCore.assignedProcess();
             if (previouslyAssignedPCB != null) {
@@ -49,22 +40,26 @@ public class FIFOScheduler  implements OSScheduler{
                     aCore.assignProcess(null);
                     previouslyAssignedPCB = null;
                 }
+
+            }
+
+            if(previouslyAssignedPCB == null)
+            {
+                if(q.isEmpty()!=true)
+                {
+                    nextp = q.get(0);
+                    System.out.println("THISSSSSSSSSSSSSSSSSSS ISSSSSS THE PRCESSSSSSSSSS BEING GOTTEN OUT" + q.get(0).getProcessName());
+                }
+                if(nextp!=null)
+                {
+                    aCore.assignProcess(nextp);
+                    nextp.setProcessState(ProcessControlBlock.processState.RUN);
+                    q.remove(0);
+                }
             }
         }
 
-
-        if(previouslyAssignedPCB == null)
-        {
-            if(q.isEmpty()!=true)
-            {
-                nextp = q.get(0);
-            }
-            if(nextp!=null)
-            {
-                aCore.assignProcess(nextp);
-                q.remove(0);
-            }
-        }
         return q;
-    }}
-//next time you call corehelperarrayL....it needs to have just the remaining processes
+    }
+
+}
