@@ -87,7 +87,7 @@ public class ProcessManager {
 	
 
 	public void dumpProcessArrayContents() {
-
+		System.out.println("should print PCB info now");
 		Iterator<ProcessControlBlock> processListIterator = listOfProcesses.iterator();
 		while(processListIterator.hasNext() == true) {
 			ProcessControlBlock aProcess = processListIterator.next();

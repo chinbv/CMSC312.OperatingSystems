@@ -21,9 +21,11 @@ public class Weeboo {
 	private static VirtualMemoryManager _memoryManager = new VirtualMemoryManager();
 	private static ProcessManager _processManager = new ProcessManager();
 	private static DumbScheduler _systemScheduler = new DumbScheduler();
-
+	private static Terminal terminal;
 	private static ArrayList<CPU> cpuArray = null;
 
+	public static int exeForNumOfCycles = 0;
+	public static boolean runSimulatenously = false;
 	static int numberOfCPUs = 2;
 	static int numberOfCoresPerCPU = 4;
 
@@ -50,18 +52,16 @@ public class Weeboo {
 
 		cpuArray = new ArrayList<CPU>();
 		for( int cpuCounter = 0; cpuCounter < numberOfCPUs; cpuCounter++ ) {
-			System.out.print("CPU: " + cpuCounter + "\n");
+//			System.out.print("CPU: " + cpuCounter + "\n");
 
 			CPU newCPU = new CPU("CPU-" + cpuCounter, numberOfCoresPerCPU );
 			cpuArray.add(newCPU);
 			newCPU.initialize();
 		}
-		
-		
-		loadSimulationJobFile("");
-		
-		//main loop
 
+		launchTerminal();
+		System.out.println("Continues past terminal");
+		//main loop
 
 		while(!complete) {
 			
@@ -138,47 +138,24 @@ public class Weeboo {
 		
 	}
 	
-	private static void loadSimulationJobFile(String jobFileName) {
-		// load job file
-//		File directory = new File("./");
-//		System.out.println(directory.getAbsolutePath());
+	public static void loadSimulationJobFile(String jobFileName, int cycleTime) {
 
-		//System.out.print("Please enter file name: "+ "\n");
-
-		//String nameOfFile = in.nextLine();
-
-		String pathOfFileLoaded = "/Users/brandonc/Developer/workspace/CMSC312.OperatingSystem/src/" + jobFileName;
-		System.out.println(pathOfFileLoaded);
-
-		
-		File loadFilePath = new File(pathOfFileLoaded);
-
-//		Path myPath = testFile1;
-		Path myPath = loadFilePath.toPath();
-		System.out.print("Path: "+ myPath + "\n");
-		
-		// put each job into a collection of jobs with the right clock tick to spawn
-
-		
-		// create dictionary of jobs
-		
-//		Path testFile1 = Paths.get(nameOfFile);
-		
-		
-		// example setup, should be read in from file
-		ArrayList<String>jobsArray1 = new ArrayList<String>();
-		jobsArray1.add("executable1");
-		simulationJobs.put(3, jobsArray1);
-		
-		ArrayList<String>jobsArray2 = new ArrayList<String>();
-		jobsArray2.add("executable2");
-		simulationJobs.put(7, jobsArray2);
-		
-		simulationJobs.put(12, jobsArray1);
-		
-
+		if (simulationJobs.containsKey(cycleTime)) {
+			ArrayList<String> existingCycleTime = simulationJobs.get(cycleTime);
+			existingCycleTime.add(jobFileName);
+			simulationJobs.put(cycleTime, existingCycleTime);
+		} else {
+			ArrayList<String> newCycleTime = new ArrayList<String>();
+			newCycleTime.add(jobFileName);
+			simulationJobs.put(cycleTime, newCycleTime);
+		}
+		System.out.println(simulationJobs.keySet() + "\t " +simulationJobs.values());
 	}
-	
+
+	public static void launchTerminal(){
+		terminal = new Terminal();
+		terminal.initializeTerminal();
+	}
 	
 	
 	/**
@@ -192,6 +169,7 @@ public class Weeboo {
 	 * @return the processManager
 	 */
 	public static ProcessManager processManager() {
+		System.out.println("reaches here");
 		return _processManager;
 	}
 
