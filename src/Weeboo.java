@@ -20,29 +20,19 @@ public class Weeboo {
 	
 	private static VirtualMemoryManager _memoryManager = new VirtualMemoryManager();
 	private static ProcessManager _processManager = new ProcessManager();
-//	private static DumbScheduler _systemScheduler = new DumbScheduler();
-	private static Scheduler _systemScheduler = new Scheduler();
+	private static OSScheduler _systemScheduler = null;
 	private static Terminal terminal;
 	private static ArrayList<CPU> cpuArray = null;
+	private static OSRunLoop _osRunLoop = null;
 
 	public static int exeForNumOfCycles = 0;
 	public static boolean runSimulatenously = false;
 	static int numberOfCPUs = 2;
 	static int numberOfCoresPerCPU = 4;
-
-	static int osClockTick = 0;
-	
-	static boolean hasPendingUIAction = false;
-
-	static HashMap<Integer, ArrayList<String>> simulationJobs;
-	
+		
 	
 	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
-		boolean complete = false;
-
 		
-		simulationJobs = new HashMap<Integer, ArrayList<String>>();
 		
 		Scanner in = new Scanner(System.in);
 		
@@ -61,70 +51,17 @@ public class Weeboo {
 			newCPU.initialize();
 		}
 
-
-//		launchTerminal();
-		// simulates terrminal
-		loadSimulationJobFile(" ");
-
-		System.out.println("Continues past terminal");
-		//main loop
-
-		while(!complete) {
-			
+		// launch the OS in a separate thread
+		_osRunLoop = new OSRunLoop();
+		_osRunLoop.start();
 		
-			checkforUIAction();
-			
-			checkForSimulationAction();
+		launchTerminal();
 
-
-			// schedule processes
-			_systemScheduler.initializeScheduler(processManager().readyQueue());
-			
-			//execute a process (calculate)
-			// tell each core to execute a tick
-			synchronized (ProcessManager.schedulerLock()) {
-				ProcessManager.schedulerLock().notifyAll();
-			}
-			
-			Weeboo.processManager().dumpProcessArrayContents();
-			
-			//exit
-			System.out.println("Time: " + osClockTick);
-			if(osClockTick == 100) {
-				complete = true;
-			}
-			osClockTick++;
-		}
 		
 		// need to shut down cores (threads)
 		
 		System.out.println("Exiting");
 	}
-
-	private static void checkforUIAction() {
-		if( hasPendingUIAction == true ) {
-			// then do that
-		}
-	}
-
-	private static void checkForSimulationAction() throws IOException {
-		// should consult collection of jobs for any actions to be performed
-		System.out.println("checking for jobs for tick " + osClockTick);
-		ArrayList<String>jobsForTick = simulationJobs.get(osClockTick);
-		
-		if( jobsForTick != null ) {
-			Iterator<String> jobIterator = jobsForTick.iterator();
-			
-			while( jobIterator.hasNext()) {
-				String jobDescription = jobIterator.next();
-				
-				// jobs are likely to spawn processes
-				ProcessControlBlock aPCB = Weeboo.processManager().createProcessControlBlock(jobDescription);
-			}
-		}
-		
-	}
-
 
 	public static ArrayList<CPUCore> allCores() {
 		Iterator<CPU> cpuIterator = cpuArray.iterator();
@@ -149,31 +86,57 @@ public class Weeboo {
 		jobFileName = "TestFile1.txt";
 		try {
 			Scanner readJobFile = new Scanner(new File(jobFileName));
-			while(readJobFile.hasNextLine()) {
-				ArrayList<String> elementsEntered = new ArrayList<>();
-				String command = readJobFile.next();
-				System.out.println(command);
-				if(command.toUpperCase().equals("LOAD")) {
-					int cycleNum = readJobFile.nextInt();
-					String processFile = readJobFile.next();
-					System.out.println("read job file " + processFile + " " + cycleNum);
-					if (simulationJobs.containsKey(cycleNum)) {
-						ArrayList<String> existingCycleTime = simulationJobs.get(cycleNum);
-						existingCycleTime.add(jobFileName);
-						simulationJobs.put(cycleNum, existingCycleTime);
-					} else {
-						ArrayList<String> newCycleTime = new ArrayList<String>();
-						newCycleTime.add(jobFileName);
-						simulationJobs.put(cycleNum, newCycleTime);
+			
+			synchronized (OSRunLoop.runLoopLock()) {
+				HashMap<Integer, ArrayList<String>> simulationJobs = osRunLoop().simulationJobs();
+
+				
+				while(readJobFile.hasNextLine()) {
+					ArrayList<String> elementsEntered = new ArrayList<>();
+					String command = readJobFile.next();
+					System.out.println(command);
+					if(command.toUpperCase().equals("LOAD")) {
+						int cycleNum = readJobFile.nextInt();
+						String processFile = readJobFile.next();
+						
+							
+						System.out.println("read job file " + processFile + " " + cycleNum);
+						if (simulationJobs.containsKey(cycleNum)) {
+							ArrayList<String> existingCycleTime = simulationJobs.get(cycleNum);
+							existingCycleTime.add(jobFileName);
+							simulationJobs.put(cycleNum, existingCycleTime);
+						} else {
+							ArrayList<String> newCycleTime = new ArrayList<String>();
+							newCycleTime.add(jobFileName);
+							simulationJobs.put(cycleNum, newCycleTime);
+						}
+					
 					}
+					
 				}
+
+				System.out.println(simulationJobs.keySet() + "\t " +simulationJobs.values());
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		System.out.println(simulationJobs.keySet() + "\t " +simulationJobs.values());
 
+		
+		// example setup, should be read in from file
+		/*
+		ArrayList<String>jobsArray1 = new ArrayList<String>();
+		jobsArray1.add("executable1");
+		simulationJobs.put(3, jobsArray1);
+		
+		ArrayList<String>jobsArray2 = new ArrayList<String>();
+		jobsArray2.add("executable2");
+		simulationJobs.put(7, jobsArray2);
+		
+		simulationJobs.put(12, jobsArray1);
+		*/
+		
 	}
 
 	public static void launchTerminal(){
@@ -200,8 +163,20 @@ public class Weeboo {
 	 * @return the processManager
 	 */
 	public static ProcessManager processManager() {
-		System.out.println("reaches here");
 		return _processManager;
 	}
 
+	/**
+	 * @return the Scheduler
+	 */
+	public static OSScheduler scheduler() {
+		if( _systemScheduler == null ) {
+			_systemScheduler = new DumbScheduler();
+		}
+		return _systemScheduler;
+	}
+	
+	public static OSRunLoop osRunLoop() {
+		return _osRunLoop;
+	}
 }
