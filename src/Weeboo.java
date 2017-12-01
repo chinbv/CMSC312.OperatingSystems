@@ -39,7 +39,8 @@ public class Weeboo {
 		System.out.print("Weeboo:~ Booting$ " + "\n");
 		
 		// initialize CPUs
-		System.out.print("Initializing CPUs$ " + "\n");
+		System.out.print("Initializing CPUs$...." + "\n");
+		System.out.print("Weeboo: Welcome to Weeboo!$ " + "\n");
 
 		cpuArray = new ArrayList<CPU>();
 
@@ -83,13 +84,15 @@ public class Weeboo {
 	
 	public static void loadSimulationJobFile(String jobFileName) {
 		// hardcoded file for testing
-		jobFileName = "TestFile1.txt";
+//		jobFileName = "TestFile1.txt";
 		try {
 			Scanner readJobFile = new Scanner(new File(jobFileName));
 
 			synchronized (OSRunLoop.runLoopLock()) {
 				HashMap<Integer, ArrayList<String>> simulationJobs = osRunLoop().simulationJobs();
 
+				int schedulerDemarker = readJobFile.nextInt();
+				changingScheduler(schedulerDemarker);
 				
 				while(readJobFile.hasNextLine()) {
 					ArrayList<String> elementsEntered = new ArrayList<>();
@@ -122,6 +125,26 @@ public class Weeboo {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private static void changingScheduler(int demarker) {
+		
+		switch(demarker) {
+		case 1: _systemScheduler = new RoundRobinScheduler();
+				System.out.println("Round Robin Scheduler selected.");
+			break;
+		
+		case 2: _systemScheduler = new FIFOScheduler();
+				System.out.println("First In, First Out Scheduler selected.");
+			break;
+			
+		case 3: _systemScheduler = new SJFScheduler();
+				System.out.println("Shortest Job First Scheduler selected.");
+			break;
+			
+		default: demarker = 2;
+		} 
+		
 	}
 
 	public static void launchTerminal(){

@@ -16,7 +16,7 @@ public class Terminal {
     }
 
     private void readCommand() {
-        System.out.print("Operating-System:~ welcome$ ");
+    	System.out.print("Weeboo: user$ ");
         Scanner readLine = new Scanner(System.in);
         String commandLineEntered = readLine.nextLine();
         Scanner parseCommand = new Scanner(commandLineEntered);
