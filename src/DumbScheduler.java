@@ -42,7 +42,11 @@ public class DumbScheduler {
 			
 			ProcessControlBlock previouslyAssignedPCB = aCore.assignedProcess();
 			if( previouslyAssignedPCB != null) {
+				ProcessControlBlock nextProcess = readyQueue.get(0);
 				
+				if( nextProcess != null ) {
+					aCore.assignProcess(nextProcess);
+				}
 			}
 		}
 	}

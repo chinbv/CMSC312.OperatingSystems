@@ -41,14 +41,15 @@ public class ProcessManager {
 		//States: NEW(1), READY(2), RUN(3), WAIT(4), EXIT(5)
 		ProcessControlBlock newPCB = new ProcessControlBlock(processId, priority);
 		
+		newPCB.setProcessState(ProcessControlBlock.processState.NEW);
+
 		// allocate memory for the process
 		newPCB.allocateMemory(fileSize);
-		
 		newPCB.loadExecutable(executablePath);
-
-
    
 		listOfProcesses.add(newPCB);
+		
+		newPCB.setProcessState(ProcessControlBlock.processState.READY);
 		return newPCB;
 	}
 	
