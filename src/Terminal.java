@@ -41,6 +41,7 @@ public class Terminal {
             case "MEM":
                 System.out.println("MEM entered");
                 commandEntered = "MEM";
+                mem();
                 break;
             case "LOAD":
                 System.out.println("LOAD entered");
@@ -69,11 +70,13 @@ public class Terminal {
             case "RESET":
                 System.out.println("RESET entered");
                 processManager.resetAllProcesses();
-                commandEntered = "RESET"; // all processes are terminated & simulator clock is 0
+                commandEntered = "RESET";
+                reset();
                 break;
             case "EXIT":
                 System.out.println("EXIT entered");
                 commandEntered = "EXIT";
+                exit();
                 break;
             default:
                 commandEntered = "INVALID";
@@ -101,5 +104,24 @@ public class Terminal {
         } else {
             nocycleNum = true;
         }
+    }
+
+    public void mem(){
+        System.out.println("Memory: "+"amount of mem used" + "/" + "total mem available");
+    }
+
+    public void reset() {
+        OSClock.resetClock();
+        // reset scheduler
+        // reset cpu
+        // reset queues
+        // all processes are terminated & simulator clock is 0
+    }
+
+    public void exit(){
+        System.exit(0);
+    }
+    public ProcessManager getProcessManager(){
+        return this.processManager;
     }
 }

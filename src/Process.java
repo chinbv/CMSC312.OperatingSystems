@@ -157,4 +157,7 @@ public class Process {
 		this.startTime = st;
 	}
 
+	public ArrayList<ProcessOperation> getProcessOperations() {
+		return processOperations;
+	}
 }

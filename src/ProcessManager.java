@@ -34,7 +34,7 @@ public class ProcessManager {
 
 			long fileSize = Files.size(executablePath);
 			// buffered reader
-			// memoryBlock = Weeboo.memoryManager().allocate(fileSize);
+			Weeboo.memoryManager().allocate(newProcess, fileSize);
 		} catch(Exception e) {
 			e.printStackTrace();
 
