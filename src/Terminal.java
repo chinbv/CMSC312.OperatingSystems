@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -55,7 +56,7 @@ public class Terminal {
                     file_program_toExecute = elementsEntered.get(0);
                     System.out.println(file_program_toExecute);
                 }
-                processManager.createProcess(file_program_toExecute, numOfCycles);
+                load();
                 break;
             case "EXE":
                 System.out.println("EXE entered");
@@ -92,9 +93,29 @@ public class Terminal {
             System.out.println("No processes currently in the system.");
         }
 
-        for (Process p : queue) {
-            processManager.PCBInfo();
+        processManager.PCBInfo();
+
+    }
+
+    public void  load() {
+
+        try {
+            Scanner readJobFile = new Scanner(new File(file_program_toExecute));
+            while(readJobFile.hasNextLine()) {
+                ArrayList<String> elementsEntered = new ArrayList<>();
+                String command = readJobFile.next();
+                System.out.println(command);
+                if(command.toUpperCase().equals("LOAD")) {
+                    int cycleNum = readJobFile.nextInt();
+                    String processFile = readJobFile.next();
+                    System.out.println("read job file " + processFile + " " + cycleNum);
+                    processManager.createProcess(processFile,cycleNum);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     public void exe(int numOfCycles){

@@ -93,7 +93,7 @@ public class ProcessManager {
 			if (p.getPriority() != 0) {
 				System.out.print("Priority: " + p.getPriority() + "\t");
 			}
-			System.out.print("Number of I/O bursts: " + "haven't coded IO yet"+ "\t");
+			System.out.println("Number of I/O bursts: " + "haven't coded IO yet"+ "\t");
 		}
 	}
 

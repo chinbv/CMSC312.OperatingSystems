@@ -16,6 +16,8 @@ public class Weeboo {
 
 	public static void main(String[] args) throws IOException {
 
+
+
         Terminal terminal = new Terminal();
         terminal.initializeTerminal();
 //		boolean complete = false;
