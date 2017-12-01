@@ -10,7 +10,7 @@ public class SJFScheduler implements OSScheduler {
     CPUCore aCore;
     ProcessControlBlock nextp;
     public ArrayList<ProcessControlBlock> sjQueue = new ArrayList<>();
-
+    int counter  =0;
 
     public SJFScheduler() {
 
@@ -18,34 +18,22 @@ public class SJFScheduler implements OSScheduler {
 
     @Override
     public void schedule() {
-        ArrayList<ProcessControlBlock> q = Weeboo.processManager().readyQueue();
+        System.out.println("schedule is being called " + ++counter );
         allCores = Weeboo.allCores();
 
-        sjQueue = coreHelperArrayL(shortestJobScheduling(q));
-        System.out.println("____________________________________________SHORTEST JOB");
+        sjQueue = coreHelperArrayL(shortestJobScheduling(Weeboo.processManager().readyQueue()));
 
-        for (int i = 0; i < sjQueue.size();i++)
-        {
-            System.out.print(sjQueue.size() + " sjQueue " +sjQueue.get(i).getProcessName());
-        }
     }
 
-    //
-    //
     //SHORTEST JOB FIRST
-    //
-    //
     public ArrayList<ProcessControlBlock> shortestJobScheduling(ArrayList<ProcessControlBlock> q)
     {
-//        for (int i = 0; i<q.size(); i++)
-//        {
-//            sjQueue.add(q.get(i));
-//            System.out.println("---------size---------"+sjQueue.size());
-//        }
-
         sjQueue = q;
-
+        for (int i =0;i<sjQueue.size(); i++) {
+            System.out.println("SLKDJFSLKJFLSKJDFLSKJDFLSKDJFLKJSDLKFJSLKDFJ beginininginging" + sjQueue.get(i).getProcessName());
+        }
         Collections.sort(sjQueue, shortJobComparator);
+
         return sjQueue;
     }
 
@@ -58,15 +46,11 @@ public class SJFScheduler implements OSScheduler {
             return Double.compare(process1, process2);
         }};
 
-    //
-    //
     //ASSIGN CORES
-    //
-    //
     public ArrayList<ProcessControlBlock> coreHelperArrayL(ArrayList<ProcessControlBlock> q)
     {
         Iterator<CPUCore> coreIterator = allCores.iterator();
-        while( coreIterator.hasNext()) {
+        while( coreIterator.hasNext() && q.isEmpty()!=true) {
             aCore = coreIterator.next();
             previouslyAssignedPCB = aCore.assignedProcess();
             if (previouslyAssignedPCB != null) {
@@ -76,22 +60,23 @@ public class SJFScheduler implements OSScheduler {
                     previouslyAssignedPCB = null;
                 }
             }
+
+            if(previouslyAssignedPCB == null)
+            {
+                if(q.isEmpty()!=true)
+                {
+                    nextp = q.get(0);
+                    System.out.println("THISSSSSSSSSSSSSSSSSSS ISSSSSS THE PRCESSSSSSSSSS BEING GOTTEN OUT" + q.get(0).getProcessName());
+                }
+                if(nextp!=null)
+                {
+                    aCore.assignProcess(nextp);
+                    nextp.setProcessState(ProcessControlBlock.processState.RUN);
+                    q.remove(0);
+                }
+            }
         }
 
-
-        if(previouslyAssignedPCB == null)
-        {
-            if(q.isEmpty()!=true)
-            {
-                nextp = q.get(0);
-            }
-            if(nextp!=null)
-            {
-                aCore.assignProcess(nextp);
-                q.remove(0);
-            }
-        }
         return q;
     }}
 //next time you call corehelperarrayL....it needs to have just the remaining processes
-
