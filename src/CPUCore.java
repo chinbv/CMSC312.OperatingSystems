@@ -7,7 +7,9 @@ public class CPUCore extends Thread {
 	private ProcessControlBlock assignedPCB = null;
 	private Object schedulerLock;
 	private boolean stopRequested = false;
+	private boolean _interrupted = false;
 	private int coreIndex;
+	private IORequest _completedIORequest = null;
 	
 	public CPUCore(CPU aCPU, int aCoreIndex) {
 		parentCPU = aCPU;
@@ -39,8 +41,17 @@ public class CPUCore extends Thread {
 					if( assignedPCB != null ) {
 						System.out.println(parentCPU.cpuID() + ":" + coreIndex + " executing tick");
 						System.out.println(assignedPCB.getProcessName() + " boolean: "+(assignedPCB == null));
+						
 						assignedPCB.executeTick();
 					} else {
+						
+						// process interrupt
+						if( _interrupted == true ) {
+							_completedIORequest.getPCB().ioCompletionHandler(_completedIORequest);
+							_completedIORequest = null;
+							_interrupted = false;
+						}
+						
 						System.out.println(parentCPU.cpuID() + ":" + coreIndex + " no process to execute");
 					}
 				}
@@ -56,4 +67,24 @@ public class CPUCore extends Thread {
 		stopRequested = true;
 	}
 	
+	public void interrupt(IORequest anIORequest) {
+		_interrupted = true;
+		
+		// dequeue running process if any
+		if( this.assignedPCB != null) {
+			ProcessControlBlock pcbToBeDequeued = this.assignedPCB;
+			
+			pcbToBeDequeued.setProcessState(ProcessControlBlock.processState.READY);
+			this.assignedPCB = null;
+			
+		}
+	}
+	
+	public boolean isIdle() {
+		if( isInterrupted() == true || this.assignedPCB != null) {
+			return false;
+		}
+		
+		return true;
+	}
 }

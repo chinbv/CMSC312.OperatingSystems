@@ -1,5 +1,6 @@
 //max waiting time for IO = 50
 import java.util.Random;
+
 public class IORequest {
     private int _ioWaitTicks;
     ProcessControlBlock _processControlBlock = null;
@@ -16,7 +17,19 @@ public class IORequest {
     	
     	_ioWaitTicks = OSClock.getClock() + ((randomIO.nextInt(50))); //double check 50
     	
-    	// TODO more
+    	// set process state to wait for I/O to complete
+    	_processControlBlock.setProcessState(ProcessControlBlock.processState.WAIT);
+    	
+    	Weeboo.interruptHandler().addIO(this);
+    }
+    
+    
+    public ProcessControlBlock getPCB() {
+    	return this._processControlBlock;
+    }
+    
+    public int ioCompletionTime() {
+    	return _ioWaitTicks;
     }
 
 }
