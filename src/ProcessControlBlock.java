@@ -112,6 +112,7 @@ public class ProcessControlBlock {
 
 		ProcessOperation op = processOperations.get(lastCommandReadIndex + 1);
 		Random randomNum = new Random();
+		
 		// script command
 		switch (op.getOpType()) {
 			case CALCULATE:
@@ -123,8 +124,8 @@ public class ProcessControlBlock {
 				break;
 			case IO:
 				// IO Interrupt
-				this.setProcessState(processState.WAIT);
-				int ioTime = randomNum.nextInt(50) + 1;
+				IORequest newIORequest = new IORequest(this);
+				newIORequest.requestIO();
 				break;
 			case YIELD:
 				break;

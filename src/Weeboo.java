@@ -21,6 +21,7 @@ public class Weeboo {
 	private static VirtualMemoryManager _memoryManager = new VirtualMemoryManager();
 	private static ProcessManager _processManager = new ProcessManager();
 	private static OSScheduler _systemScheduler = null;
+	private static InterruptHandler _systemInterruptHandler = null;
 	private static Terminal terminal;
 	private static ArrayList<CPU> cpuArray = null;
 	private static OSRunLoop _osRunLoop = null;
@@ -183,6 +184,14 @@ public class Weeboo {
 		}
 		return _systemScheduler;
 	}
+	
+	public static InterruptHandler interruptHandler() {
+		if( _systemInterruptHandler == null ) {
+			_systemInterruptHandler = new InterruptHandler();
+		}
+		return _systemInterruptHandler;
+	}
+	
 	
 	public static OSRunLoop osRunLoop() {
 		return _osRunLoop;

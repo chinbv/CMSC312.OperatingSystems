@@ -49,6 +49,8 @@ public class OSRunLoop extends Thread {
 			// schedule processes
 			Weeboo.scheduler().schedule();
 			
+			Weeboo.interruptHandler().handleInterrupts();
+			
 			//execute a process (calculate)
 			// tell each core to execute a tick
 			synchronized (ProcessManager.schedulerLock()) {
