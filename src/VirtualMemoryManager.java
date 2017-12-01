@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class VirtualMemoryManager {
 
@@ -62,31 +63,83 @@ public class VirtualMemoryManager {
         private long nextFreeMemoryBlockOfSize(long allocationAmount) {
         	//TODO this has to be done for real
         	
+        	// figure out if there is enough free physical memory
+        	
+        	// if not, then choose a process to swap out
+        	
+        	//ProcessControlBlock processToSwap;
+        	
+        	//swapOutProcess(processToSwap);
+        	
+        	
 			return _currentFreeMemory;
 		}
         
-//        
-//        private void swapping() {
-//        	if(_currentFreeMemory<=0) {
-//        		swapIntoPageFile();
-//        	}
-//        }
-//        
-//        private void swapIntoPageFile() {
-//        	VMPageInfo pageSwappedIn;
-////        	pageFileMap.put(hashMapKey, pageSwappedIn);//process is put into the page file map
-//        	_currentFreeMemory--;
-//        	memoryUsed++;
-//        	
-//        }
-//        
-//        private VMPageInfo swapOutOfPageFile() {
-//        	VMPageInfo pageSwappedOut = (VMPageInfo) pageFileMap.get(hashMapKey);
-//        	_currentFreeMemory++;
-//        	memoryUsed--;
-//        	return pageSwappedOut;
-//        }
         
+    	public void swapOutProcess(ProcessControlBlock aProcess) {
+    		// since we cannot simulate normal paging, we will swap in and out entire processes
+    		
+    		if( aProcess == null) {
+    			return;
+    		}
+    		/* grab all the pages for a process */
+    		ArrayList<VMPageInfo>processPages = aProcess.allMemoryPages();
+    		if( processPages != null && processPages.isEmpty() != true ) {
+    			Iterator<VMPageInfo>pageIterator = processPages.iterator();
+    			
+    			while( pageIterator.hasNext()) {
+    				pageOut(pageIterator.next());
+    			}
+    		}
+    		
+    	}
+    	
+    	
+    	public boolean isProcessInPhysicalMemory(ProcessControlBlock aProcess) {
+    		// since we cannot simulate normal paging, we will swap in and out entire processes
+    		boolean isResident = true;
+    		
+    		if( aProcess == null) {
+    			return false;
+    		}
+    		/* grab all the pages for a process */
+    		ArrayList<VMPageInfo>processPages = aProcess.allMemoryPages();
+    		if( processPages != null && processPages.isEmpty() != true ) {
+    			Iterator<VMPageInfo>pageIterator = processPages.iterator();
+    			
+    			while( pageIterator.hasNext()) {
+    				VMPageInfo aPage = pageIterator.next();
+    				
+    				
+    				if( aPage.isInPhysicalMemory() == false) {
+    					isResident = false;
+    				}
+    			}
+    		}
+    		return isResident;
+    	}
+    	
+    	public void swapInProcess(ProcessControlBlock aProcess) {
+    		// since we cannot simulate normal paging, we will swap in and out entire processes
+    		
+    		if( aProcess == null) {
+    			return;
+    		}
+    		/* grab all the pages for a process */
+    		ArrayList<VMPageInfo>processPages = aProcess.allMemoryPages();
+    		if( processPages != null && processPages.isEmpty() != true ) {
+    			Iterator<VMPageInfo>pageIterator = processPages.iterator();
+    			
+    			while( pageIterator.hasNext()) {
+    				VMPageInfo aPage = pageIterator.next();
+    				
+    				
+    				pageIn(pageIterator.next());
+    			}
+    		}
+    	}
+    	
+
         public void pageOut(VMPageInfo aPage) {
         	
         	// takes a page and puts it into the page file

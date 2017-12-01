@@ -37,9 +37,6 @@ public class ProcessControlBlock {
 		this._memoryAllocations = new ArrayList<VMPageInfo>();
 		this.processOperations = new ArrayList<>();
 	}
-	
-
-	
 
 	public int processID() {
 		return _processID;
@@ -104,6 +101,11 @@ public class ProcessControlBlock {
 	}
 	
 	synchronized public void executeTick() {
+		
+		//normally, pages are brought in individually on demand
+		//but for the simulation, we bring all the pages in
+		Weeboo.memoryManager().swapInProcess(this);
+		
 		System.out.println("executing process ID: " + _processID);
 		
 		// script command
@@ -125,6 +127,10 @@ public class ProcessControlBlock {
 		// else
 		return false;
 		
+	}
+	
+	public ArrayList<VMPageInfo> allMemoryPages() {
+		return _memoryAllocations;
 	}
 
 	public String stringForProcessState() {
