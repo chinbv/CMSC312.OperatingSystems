@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 
+
 public class DumbScheduler {
 	
 	//public abstract Queue<ProcessControlBlock> schedule(ArrayList<ProcessControlBlock> listOfPRocesses);
@@ -41,12 +42,26 @@ public class DumbScheduler {
 			CPUCore aCore = coreIterator.next();
 			
 			ProcessControlBlock previouslyAssignedPCB = aCore.assignedProcess();
+			
+			if( previouslyAssignedPCB != null) {
+				if( previouslyAssignedPCB.getProcessState() == ProcessControlBlock.processState.RUN ) {
+					// 
+					//TODO unschedule based on quantum
+				}
+				
+				// deschedule from core
+				aCore.assignProcess(null);
+				previouslyAssignedPCB = null;	// allow core to schedule below
+			}
+			
+			
 			if( previouslyAssignedPCB == null) {
 				if( readyQueue.isEmpty() != true) {
 					ProcessControlBlock nextProcess = readyQueue.get(0);
 				
 					if( nextProcess != null ) {
 						aCore.assignProcess(nextProcess);
+						readyQueue.remove(0);
 					}
 				}
 			}

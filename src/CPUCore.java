@@ -17,6 +17,9 @@ public class CPUCore extends Thread {
 
 	synchronized public void assignProcess(ProcessControlBlock aPCB) {
 		this.assignedPCB = aPCB;
+		if( aPCB != null) {
+			aPCB.setProcessState(ProcessControlBlock.processState.RUN);
+		}
 	}
 	
 	public ProcessControlBlock assignedProcess() {

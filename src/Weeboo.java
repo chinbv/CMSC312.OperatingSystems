@@ -84,7 +84,7 @@ public class Weeboo {
 			
 			//exit
 			System.out.println("Time: " + osClockTick);
-			if(osClockTick == 10) {
+			if(osClockTick == 100) {
 				
 				complete = true;
 			}

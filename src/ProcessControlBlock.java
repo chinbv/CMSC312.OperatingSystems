@@ -13,6 +13,7 @@ public class ProcessControlBlock {
 //	String executableName;
 	processState _currentState;
 	ArrayList<VMPageInfo> _memoryAllocations;
+	private int simulationJobTicksRemaining;	// for simulation purposes, how long to run
 	
 	scriptCommands currentScript;
 	
@@ -60,6 +61,9 @@ public class ProcessControlBlock {
 	
 	public void setProcessState(processState currentState) {
 		this._currentState = currentState;
+		
+		// for simulation
+		simulationJobTicksRemaining = 5;
 	}
 
 	
@@ -136,6 +140,11 @@ public class ProcessControlBlock {
 		for( int counter = 0; counter < 50; counter++ ) {
 			int something = 2;
 			something *= something;
+		}
+		
+		simulationJobTicksRemaining--;
+		if( simulationJobTicksRemaining == 0) {
+			this.setProcessState(ProcessControlBlock.processState.READY);
 		}
 		
 	}
