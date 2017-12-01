@@ -74,13 +74,14 @@ public class OSRunLoop extends Thread {
 			// then do that
 			}
 			
-			while( _isAllowedToRun == 0 ) {
-				try {
-					sleep(100);
-				} catch (InterruptedException e) {
+		}
+		
+		while( _isAllowedToRun == 0 ) {
+			try {
+				sleep(100);
+			} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				e.printStackTrace();
 			}
 		}
 	}
