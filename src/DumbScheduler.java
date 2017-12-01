@@ -41,11 +41,13 @@ public class DumbScheduler {
 			CPUCore aCore = coreIterator.next();
 			
 			ProcessControlBlock previouslyAssignedPCB = aCore.assignedProcess();
-			if( previouslyAssignedPCB != null) {
-				ProcessControlBlock nextProcess = readyQueue.get(0);
+			if( previouslyAssignedPCB == null) {
+				if( readyQueue.isEmpty() != true) {
+					ProcessControlBlock nextProcess = readyQueue.get(0);
 				
-				if( nextProcess != null ) {
-					aCore.assignProcess(nextProcess);
+					if( nextProcess != null ) {
+						aCore.assignProcess(nextProcess);
+					}
 				}
 			}
 		}
