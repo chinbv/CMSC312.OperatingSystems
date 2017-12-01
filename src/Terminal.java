@@ -82,12 +82,13 @@ public class Terminal {
         }
     }
 
+
     public void  load(String file) {
         Weeboo.loadSimulationJobFile(file);
     }
 
     public void mem(){
-        System.out.println("Memory: "+ Weeboo.memoryManager().getMemoryUsed() + "/" + Weeboo.memoryManager().getmaxMemory());
+        System.out.println("Memory: "+ Weeboo.memoryManager().memoryUsed() + "/" + Weeboo.memoryManager().physicalMemorySize());
     }
 
     public void reset() {

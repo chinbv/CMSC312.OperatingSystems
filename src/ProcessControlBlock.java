@@ -112,10 +112,10 @@ public class ProcessControlBlock {
 	}
 
 	public boolean allocateMemory(long amount) {
-		VMPageInfo newPage = Weeboo.memoryManager().allocate(this, amount);
+		ArrayList<VMPageInfo> newPagesList = Weeboo.memoryManager().malloc(this, amount);
 		
-		if( newPage != null ) {
-			_memoryAllocations.add(newPage);
+		if( newPagesList != null ) {
+			_memoryAllocations.addAll(newPagesList);
 			return true;
 		}
 		// else

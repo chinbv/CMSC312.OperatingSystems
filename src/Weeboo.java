@@ -61,8 +61,11 @@ public class Weeboo {
 			newCPU.initialize();
 		}
 
+
 //		launchTerminal();
-//		loadSimulationJobFile(" ");
+		// simulates terrminal
+		loadSimulationJobFile(" ");
+
 		System.out.println("Continues past terminal");
 		//main loop
 
@@ -142,8 +145,8 @@ public class Weeboo {
 	}
 	
 	public static void loadSimulationJobFile(String jobFileName) {
-
-//		jobFileName = "TestFile1.txt";
+		// hardcoded file for testing
+		jobFileName = "TestFile1.txt";
 		try {
 			Scanner readJobFile = new Scanner(new File(jobFileName));
 			while(readJobFile.hasNextLine()) {
@@ -169,14 +172,21 @@ public class Weeboo {
 			e.printStackTrace();
 		}
 
-
 		System.out.println(simulationJobs.keySet() + "\t " +simulationJobs.values());
+
 	}
 
 	public static void launchTerminal(){
 		terminal = new Terminal();
 		terminal.initializeTerminal();
 	}
+	
+	public static void kernelPanic(String customMessage) {
+		System.out.println(customMessage);
+		
+		// should simulate a kernel panic and stop
+		return;
+	}	
 	
 	
 	/**
