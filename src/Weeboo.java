@@ -57,6 +57,9 @@ public class Weeboo {
 			newCPU.initialize();
 		}
 		
+		
+		loadSimulationJobFile("");
+		
 		//main loop
 
 
@@ -135,7 +138,7 @@ public class Weeboo {
 		
 	}
 	
-	public void loadSimulationJobFile(String jobFileName) {
+	private static void loadSimulationJobFile(String jobFileName) {
 		// load job file
 //		File directory = new File("./");
 //		System.out.println(directory.getAbsolutePath());

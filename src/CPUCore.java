@@ -28,9 +28,9 @@ public class CPUCore extends Thread {
 		synchronized (schedulerLock) {
 			try {
 				while( stopRequested != true ) {
-					System.out.println(parentCPU.cpuID() + ":" + coreIndex + " before schedulerLock");
+					//System.out.println(parentCPU.cpuID() + ":" + coreIndex + " before schedulerLock");
 					schedulerLock.wait();
-					System.out.println(parentCPU.cpuID() + ":" + coreIndex + " after schedulerLock");
+					//System.out.println(parentCPU.cpuID() + ":" + coreIndex + " after schedulerLock");
 					
 					if( assignedPCB != null ) {
 						System.out.println(parentCPU.cpuID() + ":" + coreIndex + " executing tick");

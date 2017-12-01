@@ -112,10 +112,9 @@ public class ProcessControlBlock {
 		return returnString;
 	}
 	
-	public void loadExecutable(String aFilename) throws IOException {
+	public void loadExecutable(Path executablePath) throws IOException {
 		
-		// for the moment, do nothing
-		return;
+	
 		/*
 		BufferedReader fileReader = new BufferedReader(new FileReader(aFilename));
 		String line = null;
@@ -123,6 +122,10 @@ public class ProcessControlBlock {
 			System.out.println(line);
 		}
 		*/
+		
+		
+		// for the moment, do nothing
+		return;
 		
 	}
 	

@@ -21,25 +21,33 @@ public class ProcessManager {
 
 	public ProcessControlBlock createProcessControlBlock(String pathString) throws IOException {
 
-		String executableFilename = "";
-
-		Path executablePath = FileSystems.getDefault().getPath(executableFilename);
+		System.out.println("creating process executing " + pathString);
+		Path executablePath = FileSystems.getDefault().getPath(pathString);
+		long fileSize;
+		
+		// stat call using file management system to get size of file
+		try {
+			fileSize = Files.size(executablePath);
+			
+			
+		} catch (Exception e) {
+			// need to handle this properly, but for now, just set fileSize statically
+			fileSize = 252;
+		}
 
 		int processId = nextAvailableProcessId();
 		int priority = assigningPriority();
 		//
 		//States: NEW(1), READY(2), RUN(3), WAIT(4), EXIT(5)
 		ProcessControlBlock newPCB = new ProcessControlBlock(processId, priority);
-		newPCB.loadExecutable(executableFilename);
-		// stat call using file managment system to get size of file
-		long fileSize = Files.size(executablePath);
-		// buffered reader
+		
+		// allocate memory for the process
 		newPCB.allocateMemory(fileSize);
 		
-        
-		// System.out.println("Max Size: " +
-		// Weeboo.memoryManager().maxMemorySize + " CFMS: "
-		// + Weeboo.memoryManager().currentFreeMemorySize);
+		newPCB.loadExecutable(executablePath);
+
+
+   
 		listOfProcesses.add(newPCB);
 		return newPCB;
 	}
