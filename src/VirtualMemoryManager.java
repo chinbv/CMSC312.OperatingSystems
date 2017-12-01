@@ -4,10 +4,10 @@ import java.util.Iterator;
 
 public class VirtualMemoryManager {
 
-        public final static long _totalPhysicalMemorySize = 4096 * 1024 * 1024;
-        public final static long _vmPageSize = 4096;
-        private static long _currentFreeMemory = _totalPhysicalMemorySize;
-        private static long memoryUsed = 0;
+        private long _totalPhysicalMemorySize = 0;
+        private long _vmPageSize = 4096;
+        private long _currentFreeMemory = 0;
+        private long memoryUsed = 0;
         private ArrayList<VMPageInfo> _allocatedPagesList = null;
         private int nextPageFileFreeIndex = 0;
     	HashMap<Integer,VMPageInfo> pageFileMap = new HashMap<Integer,VMPageInfo>();
@@ -15,6 +15,11 @@ public class VirtualMemoryManager {
         
         public VirtualMemoryManager() {
         	_allocatedPagesList = new ArrayList<VMPageInfo>();
+        	
+        	_totalPhysicalMemorySize = 4096;
+        	_totalPhysicalMemorySize *= 1024;
+        	_totalPhysicalMemorySize *= 1024;
+        	_currentFreeMemory = _totalPhysicalMemorySize;
         	
         }
         
@@ -37,7 +42,7 @@ public class VirtualMemoryManager {
         {
         	
         	// figure out the number of pages for the allocation amount
-        	int numberOfPages = (int)java.lang.Math.ceil(allocationAmount / _vmPageSize);
+        	int numberOfPages = (int)java.lang.Math.ceil((double)allocationAmount / (double)_vmPageSize);
         	ArrayList<VMPageInfo>allocationList = new ArrayList<VMPageInfo>();
         
         	while( numberOfPages > 0 ) {
