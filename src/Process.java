@@ -103,7 +103,7 @@ public class Process {
 	}
 
 	public int getPriority() {
-		return this.getPriority();
+		return this.priority;
 	}
 
 	public String getProcessName() { return this.processName; }
@@ -126,6 +126,10 @@ public class Process {
 
 	public int getRoundWaitTime(){
 		return this.roundWaitTime;
+	}
+
+	public ArrayList<ProcessOperation> getProcessOperations() {
+		return processOperations;
 	}
 
 	public int getRoundTurnAroundTime() {

@@ -16,13 +16,13 @@ public class ExecuteScheduler
 
             while(p.getProcessState() != ProcessState.WAIT)
             {
-                ArrayList<ProcessOperation> ops = p.getops
+                ArrayList<ProcessOperation> ops = p.getProcessOperations();
                 int numofCyclesCompleted = 0;
                 int j = 0;
                 while(numofCyclesCompleted <= p.getBurstTime()){
                     ProcessOperation currentOp = ops.get(j);
                     switch (currentOp.getOpType()) {
-                        case OperationType.CALCULATE:
+                        case CALCULATE:
                             int runTime = currentOp.getRunTime();
                             if(runTime < p.getBurstTime())
                                 numofCyclesCompleted += runTime;
@@ -31,7 +31,7 @@ public class ExecuteScheduler
                         currentOp.setRunTime(runTime - p.getBurstTime());
                     }
                     break;
-                    case OperationType.IO:
+                    case IO:
                         //interrupt handling
                         break;
                 }
@@ -55,13 +55,13 @@ public class ExecuteScheduler
 
             while(p.getProcessState() != ProcessState.WAIT)
             {
-                ArrayList<ProcessOperation> ops = p.getops
+                ArrayList<ProcessOperation> ops = p.getProcessOperations();
                 int numofCyclesCompleted = 0;
                 int j = 0;
                 while(numofCyclesCompleted <= p.getBurstTime()){
                     ProcessOperation currentOp = ops.get(j);
                     switch (currentOp.getOpType()) {
-                        case OperationType.CALCULATE:
+                        case CALCULATE:
                             int runTime = currentOp.getRunTime();
                             if(runTime < p.getBurstTime())
                                 numofCyclesCompleted += runTime;
@@ -70,7 +70,7 @@ public class ExecuteScheduler
                                 currentOp.setRunTime(runTime - p.getBurstTime());
                             }
                             break;
-                        case OperationType.IO:
+                        case IO:
                             //interrupt handling
                             break;
                     }
@@ -98,7 +98,7 @@ public class ExecuteScheduler
                 while(numOfCyclesCompleted <= numOfCycles) {
                     ProcessOperation currentOp = ops.get(j);
                     switch (currentOp.getOpType()) {
-                        case OperationType.CALCULATE:
+                        case CALCULATE:
                             int runTime = currentOp.getRunTime();
                             if(runTime <= numOfCycles) {
                                 numOfCyclesCompleted += runTime;
@@ -107,7 +107,7 @@ public class ExecuteScheduler
                                 currentOp.setRunTime(runTime - numOfCycles);
                             }
                             break;
-                        case OperationType.IO:
+                        case IO:
                             //interrupt handling
                             break;
                     }

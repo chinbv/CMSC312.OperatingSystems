@@ -48,4 +48,8 @@ public class ProcessOperation {
     public int getRunTime() {
         return this.runTime;
     }
+
+    public void setRunTime(int rt) {
+        this.runTime = rt;
+    }
 }
