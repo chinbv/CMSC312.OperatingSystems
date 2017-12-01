@@ -31,6 +31,12 @@ public class Terminal {
                 proc();
                 commandEntered = "PROC";
                 break;
+            case "PAUSE":
+                System.out.println("PAUSE entered");
+                pause();
+                commandEntered = "PAUSE";
+                break;
+                
             case "MEM":
                 System.out.println("MEM entered");
                 commandEntered = "MEM";
@@ -45,7 +51,7 @@ public class Terminal {
                 break;
             case "EXE":
                 System.out.println("EXE entered");
-                int numOfCycles = 0;
+                int numOfCycles = -1;
                 if (elementsEntered.size() == 1) {
                     numOfCycles = Integer.parseInt(elementsEntered.get(0));
                 }
@@ -75,14 +81,14 @@ public class Terminal {
 
     public void exe(int numOfCycles){
         if (numOfCycles != 0) {
-            Weeboo.runSimulatenously = false;
-            Weeboo.exeForNumOfCycles = numOfCycles;
-        } else {
-            Weeboo.runSimulatenously = true;
+            Weeboo.osRunLoop().setAllowedToRun(numOfCycles);
         }
     }
 
-
+    public void pause(){
+        Weeboo.osRunLoop().setAllowedToRun(0);
+    }
+    
     public void  load(String file) {
         Weeboo.loadSimulationJobFile(file);
     }

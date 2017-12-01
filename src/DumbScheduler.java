@@ -6,7 +6,7 @@ import java.util.Queue;
 
 
 
-public class DumbScheduler {
+public class DumbScheduler implements OSScheduler {
 	
 	//public abstract Queue<ProcessControlBlock> schedule(ArrayList<ProcessControlBlock> listOfPRocesses);
 	
@@ -33,6 +33,10 @@ public class DumbScheduler {
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see OSScheduler#schedule()
+	 */
+	@Override
 	public void schedule() {
 		ArrayList<ProcessControlBlock> readyQueue = _processManager.readyQueue();
 		ArrayList<CPUCore> allCores = Weeboo.allCores();

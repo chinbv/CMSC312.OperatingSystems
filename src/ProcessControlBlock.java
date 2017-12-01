@@ -16,6 +16,7 @@ public class ProcessControlBlock {
 
 	private int _processID;
 	private int _priority;
+	private String processName;
 	private int remainingBurstTime;
 	private int burstTime;
 	processState _currentState;
@@ -31,6 +32,7 @@ public class ProcessControlBlock {
 		this._priority = priority;
 		this.remainingBurstTime = 0;
 		this.burstTime = 0;
+		this.processName = "";
 		this._currentState = processState.NEW;
 		this._memoryAllocations = new ArrayList<VMPageInfo>();
 		this.processOperations = new ArrayList<>();
@@ -53,6 +55,10 @@ public class ProcessControlBlock {
 	
 	public void setPriority(int priority) {
 		this._priority = priority;
+	}
+
+	public String getProcessName() {
+		return this.processName;
 	}
 
 	public processState getProcessState() {
@@ -88,8 +94,10 @@ public class ProcessControlBlock {
 	}
 	
 	public void loadExecutable(String fileName) throws IOException {
+		this.processName = fileName;
 		Scanner processLine = new Scanner(new File(fileName));
 		while (processLine.hasNextLine()) {
+
 			processOperations.add(new ProcessOperation(processLine.nextLine()));
 		}
 		calculateBurstTime();
@@ -98,11 +106,7 @@ public class ProcessControlBlock {
 	synchronized public void executeTick() {
 		System.out.println("executing process ID: " + _processID);
 		
-		// pretend work
-		for( int counter = 0; counter < 50; counter++ ) {
-			int something = 2;
-			something *= something;
-		}
+		// script command
 		
 		simulationJobTicksRemaining--;
 		if( simulationJobTicksRemaining == 0) {
