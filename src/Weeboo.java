@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
@@ -27,13 +28,18 @@ public class Weeboo {
 	static int numberOfCoresPerCPU = 4;
 
 	static int osClockTick = 0;
+	
+	static boolean hasPendingUIAction = false;
 
+	static HashMap<Integer, ArrayList<String>> simulationJobs;
 	
 	
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		boolean complete = false;
 
+		
+		simulationJobs = new HashMap<Integer, ArrayList<String>>();
 		
 		Scanner in = new Scanner(System.in);
 		
@@ -51,40 +57,15 @@ public class Weeboo {
 			newCPU.initialize();
 		}
 		
-
-		
-		// load job file
-//		File directory = new File("./");
-//		System.out.println(directory.getAbsolutePath());
-
-		System.out.print("Please enter file name: "+ "\n");
-
-		String nameOfFile = in.nextLine();
-
-		String pathOfFileLoaded = "/Users/brandonc/Developer/workspace/CMSC312.OperatingSystem/src/" + nameOfFile;
-		System.out.println(pathOfFileLoaded);
-
-		
-		File loadFilePath = new File(pathOfFileLoaded);
-
-//		Path myPath = testFile1;
-		Path myPath = loadFilePath.toPath();
-		System.out.print("Path: "+ myPath + "\n");
-		
-		// put each job into a collection of jobs with the right clock tick to spawn
-
-		
-		// create dictionary of jobs
-		
-//		Path testFile1 = Paths.get(nameOfFile);
 		//main loop
 
 
 		while(!complete) {
 			
 		
-			//load a process
-			checkForExecutablesToSpawn();
+			checkforUIAction();
+			
+			checkForSimulationAction();
 
 
 			// schedule processes
@@ -110,16 +91,29 @@ public class Weeboo {
 		System.out.println("Exiting");
 	}
 
-	
-	private static void checkForExecutablesToSpawn() throws IOException {
-
-		// should consult collection of jobs to see if a job needs to be spawned
-		
-		if( osClockTick == 5) {
-			Path myPath = null;
-			ProcessControlBlock aPCB = Weeboo.processManager().createProcessControlBlock(myPath);
+	private static void checkforUIAction() {
+		if( hasPendingUIAction == true ) {
+			// then do that
 		}
+	}
 
+	private static void checkForSimulationAction() throws IOException {
+
+		// should consult collection of jobs for any actions to be performed
+		System.out.println("checking for jobs for tick " + osClockTick);
+		ArrayList<String>jobsForTick = simulationJobs.get(osClockTick);
+		
+		if( jobsForTick != null ) {
+			Iterator<String> jobIterator = jobsForTick.iterator();
+			
+			while( jobIterator.hasNext()) {
+				String jobDescription = jobIterator.next();
+				
+				// jobs are likely to spawn processes
+				ProcessControlBlock aPCB = Weeboo.processManager().createProcessControlBlock(jobDescription);
+			}
+		}
+		
 	}
 
 
@@ -140,6 +134,36 @@ public class Weeboo {
 		return allCoresList;
 		
 	}
+	
+	public void loadSimulationJobFile(String jobFileName) {
+		// load job file
+//		File directory = new File("./");
+//		System.out.println(directory.getAbsolutePath());
+
+		//System.out.print("Please enter file name: "+ "\n");
+
+		//String nameOfFile = in.nextLine();
+
+		String pathOfFileLoaded = "/Users/brandonc/Developer/workspace/CMSC312.OperatingSystem/src/" + jobFileName;
+		System.out.println(pathOfFileLoaded);
+
+		
+		File loadFilePath = new File(pathOfFileLoaded);
+
+//		Path myPath = testFile1;
+		Path myPath = loadFilePath.toPath();
+		System.out.print("Path: "+ myPath + "\n");
+		
+		// put each job into a collection of jobs with the right clock tick to spawn
+
+		
+		// create dictionary of jobs
+		
+//		Path testFile1 = Paths.get(nameOfFile);
+
+	}
+	
+	
 	
 	/**
 	 * @return the memoryManager

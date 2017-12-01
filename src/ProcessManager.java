@@ -19,7 +19,7 @@ public class ProcessManager {
 		listOfProcesses = new ArrayList<ProcessControlBlock>();
 	}
 
-	public ProcessControlBlock createProcessControlBlock(Path path) throws IOException {
+	public ProcessControlBlock createProcessControlBlock(String pathString) throws IOException {
 
 		String executableFilename = "";
 
