@@ -74,7 +74,11 @@ public class VirtualMemoryManager {
 //        	return pageSwappedOut;
 //        }
         
-        public void pageOut() {
+        public void pageOut(VMPageInfo Page) {
+        	
+        	pageFileMap.put(hashMapKey, Page);
+        	hashMapKey++;
+        	
         	
         }
 
