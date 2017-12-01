@@ -213,4 +213,11 @@ public class ProcessControlBlock {
 		return returnString;
 	}
 	
+	public void ioCompletionHandler(IORequest _completedIORequest) {
+	
+		//process state is wait and needs to be set to ready
+		this.setProcessState(processState.READY);
+		
+	}
+	
 }

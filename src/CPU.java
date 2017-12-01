@@ -38,4 +38,16 @@ public class CPU {
 		return _cpuID;
 	}
 	
+	public CPUCore findIdleCore() {
+		Iterator<CPUCore> coreIterator = _cpuCores.iterator();
+		while(coreIterator.hasNext()) {
+			CPUCore aCore = coreIterator.next();
+			if(aCore.isIdle() == true) {
+				return aCore;
+			}
+		}
+		return null;
+		
+	}
+	
 }

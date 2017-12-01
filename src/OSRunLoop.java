@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 public class OSRunLoop extends Thread {
 
-	static int osClockTick = 0;
+	static int _osClockTick = 0;
 	boolean hasPendingUIAction = false;
 	boolean complete = false;
 	int _isAllowedToRun = 0;
@@ -60,13 +60,17 @@ public class OSRunLoop extends Thread {
 			Weeboo.processManager().dumpProcessArrayContents();
 			
 			//exit
-			System.out.println("Time: " + osClockTick);
-			osClockTick++;
+			System.out.println("Time: " + _osClockTick);
+			_osClockTick++;
 			
 			if( _isAllowedToRun > 0) {
 				_isAllowedToRun--;
 			}
 		}
+	}
+	
+	public int currentClockTick() {
+		return _osClockTick;
 	}
 	
 	private void checkforUIAction() {
@@ -101,8 +105,8 @@ public class OSRunLoop extends Thread {
 		synchronized (runLoopLock()) {
 
 			// should consult collection of jobs for any actions to be performed
-			System.out.println("checking for jobs for tick " + osClockTick);
-			ArrayList<String>jobsForTick = simulationJobs().get(osClockTick);
+			System.out.println("checking for jobs for tick " + _osClockTick);
+			ArrayList<String>jobsForTick = simulationJobs().get(_osClockTick);
 			
 			if( jobsForTick != null ) {
 				Iterator<String> jobIterator = jobsForTick.iterator();
