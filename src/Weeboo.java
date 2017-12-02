@@ -192,8 +192,9 @@ public class Weeboo {
 		}
 
 		//reset loop
-		_osRunLoop = new OSRunLoop();
-		_osRunLoop.start();
+//		_osRunLoop = new OSRunLoop();
+//		_osRunLoop.start();
+		_osRunLoop.reset();
 	}
 
 	/**

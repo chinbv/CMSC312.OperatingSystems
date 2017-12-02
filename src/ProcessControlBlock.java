@@ -142,6 +142,8 @@ public class ProcessControlBlock {
 
 		//normally, pages are brought in individually on demand
 		//but for the simulation, we bring all the pages in
+		System.out.println("executeTick before swapping");
+
 		Weeboo.memoryManager().swapInProcess(this);
 
 		System.out.println("executing process ID: " + _processID);
@@ -156,6 +158,7 @@ public class ProcessControlBlock {
 		// script command
 		switch (op.getOpType()) {
 			case CALCULATE:
+				System.out.println("Process gets inside calculate");
 				this.setProcessState(processState.RUN);
 				int decrementTime = op.getRunTime() - 1;
 				op.setRunTime(decrementTime);

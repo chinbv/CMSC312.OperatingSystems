@@ -68,6 +68,18 @@ public class OSRunLoop extends Thread {
 			}
 		}
 	}
+
+	public void reset() {
+		_osClockTick = 0;
+		hasPendingUIAction = false;
+		complete = false;
+		_isAllowedToRun = 0;
+
+		 _simulationJobs = null;
+
+		_runLoopLock = null;
+
+	}
 	
 	public int currentClockTick() {
 		return _osClockTick;

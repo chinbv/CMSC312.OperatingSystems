@@ -60,6 +60,7 @@ public class CPUCore extends Thread {
 		synchronized (schedulerLock) {
 			try {
 				boolean roundRobinCycle = false;
+				System.out.println("inside run method");
 				while( stopRequested != true ) {
 					//System.out.println(parentCPU.cpuID() + ":" + coreIndex + " before schedulerLock");
 					schedulerLock.wait();
