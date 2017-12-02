@@ -213,6 +213,8 @@ public class ProcessControlBlock {
 			Weeboo.memoryManager().deallocPage(aPage);
 		}
 		
+		_memoryAllocations.clear();
+		
 		Weeboo.processManager().exitProcess(this);
 	}
 	
