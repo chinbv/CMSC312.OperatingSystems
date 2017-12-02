@@ -1,6 +1,7 @@
 import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -199,6 +200,24 @@ public class ProcessControlBlock {
 		// else
 		return false;
 
+	}
+	
+	public boolean isResidentInMemory() {
+		boolean isResident = false;
+		
+		if( _memoryAllocations != null ) {
+			Iterator<VMPageInfo>pageIterator = _memoryAllocations.iterator();
+			
+			while( isResident == false && pageIterator.hasNext()) {
+				VMPageInfo aPage = pageIterator.next();
+				
+				if(aPage.isInPhysicalMemory()) {
+					isResident = true;
+				}
+			}
+		}
+		
+		return isResident;
 	}
 
 	public boolean roundRobinCyclesCompleted() {
