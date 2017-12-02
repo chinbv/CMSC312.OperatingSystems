@@ -40,11 +40,10 @@ public class CPUCore extends Thread {
 					schedulerLock.wait();
 					//System.out.println(parentCPU.cpuID() + ":" + coreIndex + " after schedulerLock");
 
-					if( assignedPCB != null && !roundRobinCycle) {
+					if( assignedPCB != null) {
 						System.out.println(parentCPU.cpuID() + ":" + coreIndex + " executing tick");
 
 						assignedPCB.executeTick();
-						roundRobinCycle = assignedPCB.roundRobinCyclesCompleted();
 					} else {
 						
 						// process interrupt

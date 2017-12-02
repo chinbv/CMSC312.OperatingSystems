@@ -157,8 +157,11 @@ public class ProcessControlBlock {
 				}
 				if(Weeboo.getSchedulerChoosen() == 1) {
 					this.roundRobinCyclesCompleted++;
-					this.setProcessState(processState.READY);
-					Weeboo.processManager().readyQueue().add(this);
+					if (roundRobinCyclesCompleted == 8) {
+						this.setProcessState(processState.READY);
+						roundRobinCyclesCompleted = 0;
+						Weeboo.processManager().readyQueue().add(this);
+					}
 				}
 				simulationJobTicksRemaining--;
 				break;
