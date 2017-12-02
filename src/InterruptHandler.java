@@ -18,11 +18,16 @@ public class InterruptHandler {
 		// synthesize here
 		int osCurrentClockTick = Weeboo.osRunLoop().currentClockTick();
 
+		//System.out.println("outstanding I/O requests: " + _outstandingIORequests.size());
 		ArrayList<IORequest>completedIORequests = _outstandingIORequests.get(osCurrentClockTick);
 		_outstandingIORequests.remove(osCurrentClockTick);
 		
+		//System.out.println("remaining I/O requests: " + _outstandingIORequests.size());
+
 		if( completedIORequests != null) {
 		
+			//System.out.println("completed I/O requests: " + completedIORequests.size());
+
 			Iterator<IORequest>requestIterator = completedIORequests.iterator();
 			while( requestIterator.hasNext()) {
 				IORequest aRequest = requestIterator.next();
@@ -32,6 +37,8 @@ public class InterruptHandler {
 		}
 		
 		
+		//System.out.println("finished I/O requests: " + _finishedIORequests.size());
+
 		IORequest request = null;
 		// choose a core to handle the I/O request, we assume we can only handle one request per tick
 		if(_finishedIORequests.isEmpty() == false) {
@@ -63,6 +70,7 @@ public class InterruptHandler {
 	
 	public void addIO(IORequest newRequest) {
 		
+		System.out.println("performing I/O request " + newRequest.getPCB().getProcessName());
 		// figure out the time tick when this request will complete
 		int osCurrentClockTick = Weeboo.osRunLoop().currentClockTick();
 		int completionClockTick = osCurrentClockTick + newRequest.ioCompletionTime();

@@ -31,6 +31,7 @@ public class ProcessControlBlock {
 	private int simulationJobTicksRemaining;    // for simulation purposes, how long to run
 	public ArrayList<ProcessOperation> processOperations;
 	private int lastCommandReadIndex;
+
 	private int memoryNeeded;
 	private int roundRobinCyclesCompleted;
 	private int numOfIOBursts;
