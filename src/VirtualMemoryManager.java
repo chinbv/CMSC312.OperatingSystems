@@ -36,6 +36,13 @@ public class VirtualMemoryManager {
         {
             return _totalPhysicalMemorySize;
         }
+        public long pageFileUsed()
+        {
+        	
+        	long pageFileUsed = pageFileMap.size() * _vmPageSize;
+        	
+            return pageFileUsed;
+        }
         
         
         public ArrayList<VMPageInfo> malloc(ProcessControlBlock aProcess, long allocationAmount)

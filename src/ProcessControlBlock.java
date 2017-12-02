@@ -102,8 +102,9 @@ public class ProcessControlBlock {
 		int counter =0;
 		while (processLine.hasNextLine()) {
 			if (counter == 0){
-				int someNumBrandonAdded = processLine.nextInt();
-				System.out.println("int in process file "+ someNumBrandonAdded);
+				int processMemory = processLine.nextInt();
+				
+				allocateMemory((long)processMemory*1024*1024);
 				processLine.nextLine();
 			} else {
 				String line = processLine.nextLine();
@@ -123,7 +124,7 @@ public class ProcessControlBlock {
 		Weeboo.memoryManager().swapInProcess(this);
 
 		System.out.println("executing process ID: " + _processID);
-
+		//allocate memory in first tick
 		ProcessOperation op = processOperations.get(lastCommandReadIndex + 1);
 		Random randomNum = new Random();
 
