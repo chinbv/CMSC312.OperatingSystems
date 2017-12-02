@@ -169,7 +169,8 @@ public class ProcessControlBlock {
 			case IO:
 				// IO Interrupt
 				Random ran = new Random();
-				int ranNum = ran.nextInt(10);
+				int ranNum = ran.nextInt(25);
+				ranNum += 25;
 				this.setNumOfIOBursts(ranNum);
 				this.setProcessState(processState.WAIT);
 				IORequest newIORequest = new IORequest(this);

@@ -33,11 +33,11 @@ public class CPUCore extends Thread {
 		
 		
 		this.assignedPCB = aPCB;
-		
-		// load pages for process into this core's cache
-		_coreCache.addAll(aPCB.allMemoryPages());
-		
+
 		if( aPCB != null) {
+			// load pages for process into this core's cache
+			_coreCache.addAll(aPCB.allMemoryPages());
+
 			aPCB.setProcessState(ProcessControlBlock.processState.RUN);
 		}
 	}
