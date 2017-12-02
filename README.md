@@ -1,5 +1,5 @@
 # Operating System Simulator
-This simulator is built in Java. 
+This simulator is built in Java. Project developed by Brandon Chin, Bansri Rawal, and Vishakha Sehgal.
 ## How to run the OS Simulator
 1. Download this GitHub repository. 
 2. Launch Terminal or Command Prompt
