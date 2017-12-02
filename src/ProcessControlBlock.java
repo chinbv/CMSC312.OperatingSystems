@@ -158,8 +158,11 @@ public class ProcessControlBlock {
 				}
 				if(Weeboo.getSchedulerChoosen() == 1) {
 					this.roundRobinCyclesCompleted++;
-					this.setProcessState(processState.READY);
-					Weeboo.processManager().readyQueue().add(this);
+					if (roundRobinCyclesCompleted == 8) {
+						this.setProcessState(processState.READY);
+						roundRobinCyclesCompleted = 0;
+						Weeboo.processManager().readyQueue().add(this);
+					}
 				}
 				simulationJobTicksRemaining--;
 				break;
@@ -172,7 +175,7 @@ public class ProcessControlBlock {
 				IORequest newIORequest = new IORequest(this);
 				newIORequest.requestIO(ranNum);
 				lastCommandReadIndex++;
-				//process state needs to be set to ready & andded to ready queue
+				//process state needs to be set to ready & added to ready queue
 				break;
 			case YIELD:
 				this.setProcessState(processState.READY);
