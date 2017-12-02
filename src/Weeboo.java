@@ -25,6 +25,7 @@ public class Weeboo {
 	private static Terminal terminal;
 	private static ArrayList<CPU> cpuArray = null;
 	private static OSRunLoop _osRunLoop = null;
+	private static int schedulerChoosen;
 
 	public static int exeForNumOfCycles = 0;
 	public static boolean runSimulatenously = false;
@@ -132,20 +133,27 @@ public class Weeboo {
 		
 		switch(demarker) {
 		case 1: _systemScheduler = new RoundRobinScheduler();
+				schedulerChoosen = 1;
 				System.out.println("Round Robin Scheduler selected.");
 			break;
 		
 		case 2: _systemScheduler = new FIFOScheduler();
+				schedulerChoosen = 2;
 				System.out.println("First In, First Out Scheduler selected.");
 			break;
 			
 		case 3: _systemScheduler = new SJFScheduler();
+				schedulerChoosen=3;
 				System.out.println("Shortest Job First Scheduler selected.");
 			break;
 			
 		default: demarker = 2;
 		} 
 		
+	}
+
+	public static int getSchedulerChoosen() {
+		return schedulerChoosen;
 	}
 
 	public static void launchTerminal(){
@@ -160,7 +168,27 @@ public class Weeboo {
 		return;
 	}	
 	
-	
+	public static void reset() {
+		_memoryManager = new VirtualMemoryManager();
+		_processManager = new ProcessManager();
+		_systemScheduler = null;
+		_systemInterruptHandler = null;
+		// resert cpu cores
+		 cpuArray = new ArrayList<CPU>();
+		exeForNumOfCycles = 0;
+		runSimulatenously = false;
+
+		for( int cpuCounter = 0; cpuCounter < numberOfCPUs; cpuCounter++ ) {
+			CPU newCPU = new CPU("CPU-" + cpuCounter, numberOfCoresPerCPU );
+			cpuArray.add(newCPU);
+			newCPU.initialize();
+		}
+
+		//reset loop
+		_osRunLoop = new OSRunLoop();
+		_osRunLoop.start();
+	}
+
 	/**
 	 * @return the memoryManager
 	 */

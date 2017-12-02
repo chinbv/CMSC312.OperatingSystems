@@ -94,7 +94,9 @@ public class ProcessManager {
 		while(processListIterator.hasNext() == true) {
 			ProcessControlBlock aProcess = processListIterator.next();
 
-			aProcess.getProcessPCBInfo();
+			if (aProcess.getProcessState() != ProcessControlBlock.processState.EXIT) {
+				aProcess.getProcessPCBInfo();
+			}
 		}
 	}
 

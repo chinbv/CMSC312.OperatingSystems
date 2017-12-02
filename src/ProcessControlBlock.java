@@ -19,6 +19,8 @@ public class ProcessControlBlock {
 
 	;
 
+	private static final int  quantum_time = 8;
+
 	private int _processID;
 	private int _priority;
 	private String processName;
@@ -29,6 +31,9 @@ public class ProcessControlBlock {
 	private int simulationJobTicksRemaining;    // for simulation purposes, how long to run
 	public ArrayList<ProcessOperation> processOperations;
 	private int lastCommandReadIndex;
+	private int memoryNeeded;
+	private int roundRobinCyclesCompleted;
+	private int numOfIOBursts;
 
 	scriptCommands currentScript;
 
@@ -41,6 +46,9 @@ public class ProcessControlBlock {
 		this.processName = "";
 		lastCommandReadIndex = -1;
 		this._currentState = processState.NEW;
+		this.memoryNeeded = 0;
+		this.roundRobinCyclesCompleted =0;
+		this.numOfIOBursts = 0;
 		this._memoryAllocations = new ArrayList<VMPageInfo>();
 		this.processOperations = new ArrayList<>();
 	}
@@ -96,14 +104,18 @@ public class ProcessControlBlock {
 		return this.burstTime;
 	}
 
+	public void setNumOfIOBursts(int IOnum) {
+		this.numOfIOBursts+= IOnum;
+	}
+
 	public void loadExecutable(String fileName) throws IOException {
 		this.processName = fileName;
 		Scanner processLine = new Scanner(new File(fileName));
 		int counter =0;
 		while (processLine.hasNextLine()) {
 			if (counter == 0){
-				int someNumBrandonAdded = processLine.nextInt();
-				System.out.println("int in process file "+ someNumBrandonAdded);
+				int memReadIn = processLine.nextInt();
+				this.memoryNeeded = memReadIn;
 				processLine.nextLine();
 			} else {
 				String line = processLine.nextLine();
@@ -130,32 +142,42 @@ public class ProcessControlBlock {
 		// script command
 		switch (op.getOpType()) {
 			case CALCULATE:
+				this.setProcessState(processState.RUN);
 				int decrementTime = op.getRunTime() - 1;
 				op.setRunTime(decrementTime);
 				if (op.getRunTime() == 0) {
 					lastCommandReadIndex++;
 				}
+				if(Weeboo.getSchedulerChoosen() == 1) {
+					this.roundRobinCyclesCompleted++;
+					this.setProcessState(processState.READY);
+					Weeboo.processManager().readyQueue().add(this);
+				}
 				simulationJobTicksRemaining--;
 				break;
 			case IO:
 				// IO Interrupt
+				Random ran = new Random();
+				int ranNum = ran.nextInt(10);
+				this.setNumOfIOBursts(ranNum);
 				this.setProcessState(processState.WAIT);
 				IORequest newIORequest = new IORequest(this);
-				newIORequest.requestIO();
+				newIORequest.requestIO(ranNum);
+				lastCommandReadIndex++;
+				//process state needs to be set to ready & andded to ready queue
 				break;
 			case YIELD:
+				this.setProcessState(processState.READY);
+				lastCommandReadIndex++;
+				Weeboo.processManager().readyQueue().add(this);
 				break;
 			case OUT:
 				this.getProcessPCBInfo();
+				lastCommandReadIndex++;
 				break;
 			case EXE:
 				this.setProcessState(processState.EXIT);
 				break;
-		}
-
-
-		if (simulationJobTicksRemaining == 0) {
-			this.setProcessState(processState.EXIT);
 		}
 
 	}
@@ -172,6 +194,10 @@ public class ProcessControlBlock {
 
 	}
 
+	public boolean roundRobinCyclesCompleted() {
+		return this.roundRobinCyclesCompleted == quantum_time;
+	}
+
 	public ArrayList<VMPageInfo> allMemoryPages() {
 		return _memoryAllocations;
 	}
@@ -181,6 +207,7 @@ public class ProcessControlBlock {
 	}
 
 	public void getProcessPCBInfo() {
+		System.out.println("");
 		System.out.print("PID: " + this.processID() + "\t");
 		System.out.print("Process Name: " + this.getProcessName() + "\t");
 		System.out.print("State: " + this.getProcessState().toString() + "\t");
@@ -189,7 +216,7 @@ public class ProcessControlBlock {
 		if (this.priority() != 0) {
 			System.out.print("Priority: " + this.priority() + "\t");
 		}
-		System.out.println("Number of I/O bursts: ");
+		System.out.println("Number of I/O bursts: " + this.numOfIOBursts);
 	}
 	
 	public void ioCompletionHandler(IORequest _completedIORequest) {

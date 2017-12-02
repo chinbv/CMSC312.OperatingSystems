@@ -16,7 +16,11 @@ public class GUI extends JFrame {
     }
 
     public void initialize() {
-        setBounds(100, 100,820,365);
+        setTitle("OS");
+        setBounds(100, 100, 820, 365);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
+
         Border border = BorderFactory.createLineBorder(Color.BLACK);
 
         //Terminal Input Field
