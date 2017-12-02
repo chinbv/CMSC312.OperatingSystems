@@ -29,6 +29,7 @@ public class ProcessControlBlock {
 	private int simulationJobTicksRemaining;    // for simulation purposes, how long to run
 	public ArrayList<ProcessOperation> processOperations;
 	private int lastCommandReadIndex;
+	
 
 	scriptCommands currentScript;
 
@@ -145,11 +146,14 @@ public class ProcessControlBlock {
 					this.setProcessState(processState.WAIT);
 					IORequest newIORequest = new IORequest(this);
 					newIORequest.requestIO();
+					lastCommandReadIndex++;
 					break;
 				case YIELD:
+					lastCommandReadIndex++;
 					break;
 				case OUT:
 					this.getProcessPCBInfo();
+					lastCommandReadIndex++;
 					break;
 				case EXE:
 					this.setProcessState(processState.EXIT);
