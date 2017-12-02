@@ -36,6 +36,8 @@ public class ProcessControlBlock {
 	private int memoryNeeded;
 	private int roundRobinCyclesCompleted;
 	private int numOfIOBursts;
+	
+	private ArrayList<VMPageInfo> _sharedLibraryPages = null;
 
 	scriptCommands currentScript;
 
@@ -63,6 +65,10 @@ public class ProcessControlBlock {
 		this._processID = id;
 	}
 
+	public void setSharedLibraryPages(ArrayList<VMPageInfo> systemLibraryPages) {
+		_sharedLibraryPages = systemLibraryPages;
+	}
+	
 	public int priority() {
 		return _priority;
 	}

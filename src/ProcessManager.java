@@ -13,9 +13,14 @@ public class ProcessManager {
 	int processPriority = 0;
 	private static Object _schedulerLock = null;
 	
+	private ArrayList<VMPageInfo> _sharedLibraryPages = null;
 
 	public ProcessManager() {
 		listOfProcesses = new ArrayList<ProcessControlBlock>();
+		
+		// allocate shared memory library pages
+		// there assume 64 megabytes
+		_sharedLibraryPages = Weeboo.memoryManager().allocateSharedMemory((long)64 * 1024 * 1024);
 	}
 
 	public ProcessControlBlock createProcessControlBlock(String pathString) throws IOException {
@@ -45,6 +50,7 @@ public class ProcessManager {
 		// allocate memory for the process
 		//newPCB.allocateMemory(fileSize);
 		newPCB.loadExecutable(pathString);
+		newPCB.setSharedLibraryPages(_sharedLibraryPages);
    
 		listOfProcesses.add(newPCB);
 		
