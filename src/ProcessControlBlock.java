@@ -170,7 +170,7 @@ public class ProcessControlBlock {
 				IORequest newIORequest = new IORequest(this);
 				newIORequest.requestIO(ranNum);
 				lastCommandReadIndex++;
-				//process state needs to be set to ready & andded to ready queue
+				//process state needs to be set to ready & added to ready queue
 				break;
 			case YIELD:
 				this.setProcessState(processState.READY);
