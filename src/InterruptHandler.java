@@ -53,7 +53,7 @@ public class InterruptHandler {
 				System.out.println("an idleCore is assigned to first core at " + idleCore.getName() + " at id: " + idleCore.getId());
 			}
 			
-			idleCore.interrupt();
+			idleCore.interruptCore(request);
 			System.out.println("idle core is interrupted at " + idleCore.getName() + " at id: " + idleCore.getId());
 		}
 		
