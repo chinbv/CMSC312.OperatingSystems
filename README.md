@@ -30,10 +30,12 @@ java Weeboo
     runs simulator until all processes are finished
 - `EXE 80 `
     runs simulator for 80 cycles
+- `RESET`
+    the simulator is reset to start state. 
     
 ### Job Files
 Structure:
-  - First Line holds an integer which references a scheduler
+  - First Line holds an integer which references a scheduler (1 = Round Robin, 2 = First In First Out, 3 = Shortest Job First)
   - Each following line has a LOAD command followed by the load time(an integer) for the process and process file name
   - Ends with an EXE command
 
