@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 
 
 public class CPUCore extends Thread {
@@ -10,20 +12,43 @@ public class CPUCore extends Thread {
 	private boolean _interrupted = false;
 	private int coreIndex;
 	private IORequest _completedIORequest = null;
+	
+	private ArrayList<VMPageInfo> _coreCache = null;
 
 	
 	public CPUCore(CPU aCPU, int aCoreIndex) {
 		parentCPU = aCPU;
 		schedulerLock = ProcessManager.schedulerLock();
 		coreIndex = aCoreIndex;
+		
+		_coreCache = new ArrayList<VMPageInfo>();
 	}
 
 	synchronized public void assignProcess(ProcessControlBlock aPCB) {
 //		System.out.println("process " + this.assignedPCB.processID() + " assigned");
+		
+		if( assignedPCB != null && assignedPCB != aPCB ) {
+			dequeueProcess();
+		}
+		
+		
 		this.assignedPCB = aPCB;
+		
+		// load pages for process into this core's cache
+		_coreCache.addAll(aPCB.allMemoryPages());
+		
 		if( aPCB != null) {
 			aPCB.setProcessState(ProcessControlBlock.processState.RUN);
 		}
+	}
+	
+	private void dequeueProcess() {
+		// dequeue
+		this.assignedPCB.setProcessState(ProcessControlBlock.processState.READY);
+		this.assignedPCB = null;
+
+		// flush cache
+		_coreCache.clear();
 	}
 	
 	public ProcessControlBlock assignedProcess() {
@@ -73,10 +98,7 @@ public class CPUCore extends Thread {
 		
 		// dequeue running process if any
 		if( this.assignedPCB != null) {
-			ProcessControlBlock pcbToBeDequeued = this.assignedPCB;
-			
-			pcbToBeDequeued.setProcessState(ProcessControlBlock.processState.READY);
-			this.assignedPCB = null;
+			dequeueProcess();
 			
 		}
 		
