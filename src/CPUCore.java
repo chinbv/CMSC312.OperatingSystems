@@ -10,6 +10,7 @@ public class CPUCore extends Thread {
 	private boolean _interrupted = false;
 	private int coreIndex;
 	private IORequest _completedIORequest = null;
+
 	
 	public CPUCore(CPU aCPU, int aCoreIndex) {
 		parentCPU = aCPU;
@@ -33,16 +34,17 @@ public class CPUCore extends Thread {
 	public void run() {
 		synchronized (schedulerLock) {
 			try {
+				boolean roundRobinCycle = false;
 				while( stopRequested != true ) {
 					//System.out.println(parentCPU.cpuID() + ":" + coreIndex + " before schedulerLock");
 					schedulerLock.wait();
 					//System.out.println(parentCPU.cpuID() + ":" + coreIndex + " after schedulerLock");
-					
-					if( assignedPCB != null ) {
+
+					if( assignedPCB != null && !roundRobinCycle) {
 						System.out.println(parentCPU.cpuID() + ":" + coreIndex + " executing tick");
-						System.out.println(assignedPCB.getProcessName() + " boolean: "+(assignedPCB == null));
-						
+
 						assignedPCB.executeTick();
+						roundRobinCycle = assignedPCB.roundRobinCyclesCompleted();
 					} else {
 						
 						// process interrupt

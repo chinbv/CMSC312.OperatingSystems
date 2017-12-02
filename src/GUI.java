@@ -36,6 +36,7 @@ class GUI extends JFrame {
         initEvent();
     }
 
+
     private void initComponent(){
         setBounds(100, 100,820,365);
         Border border = BorderFactory.createLineBorder(Color.BLACK);

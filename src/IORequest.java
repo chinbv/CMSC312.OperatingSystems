@@ -10,12 +10,15 @@ public class IORequest {
     }
 
 
-    public void requestIO() {
-         Random randomIO = new Random();
+    public void requestIO(int ranNum) {
+//         Random randomIO = new Random();
 
     	// synthesize the return interrupt for when the I/O finishes
-    	
-    	_ioWaitTicks = OSClock.getClock() + ((randomIO.nextInt(50))); //double check 50
+
+//        int ranNum = randomIO.nextInt(50);
+//        System.out.println("Random num for IO calc: "+ ranNum);
+//        _processControlBlock.setNumOfIOBursts(ranNum);
+    	_ioWaitTicks = OSClock.getClock() + ranNum; //double check 50
     	
     	// set process state to wait for I/O to complete
     	_processControlBlock.setProcessState(ProcessControlBlock.processState.WAIT);

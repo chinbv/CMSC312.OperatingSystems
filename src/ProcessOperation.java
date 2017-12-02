@@ -23,14 +23,12 @@ public class ProcessOperation {
                 break;
             case "IO":
                 opType = ProcessControlBlock.scriptCommands.IO;
-                runTime = randomNum.nextInt(50) + 1;
                 break;
             case "YIELD":
                 opType = ProcessControlBlock.scriptCommands.YIELD;
                 break;
             case "OUT":
                 opType = ProcessControlBlock.scriptCommands.OUT;
-                System.out.println("Process info & PCB info");
                 break;
             case "EXE":
                 opType = ProcessControlBlock.scriptCommands.EXE;

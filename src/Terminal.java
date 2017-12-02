@@ -27,30 +27,25 @@ public class Terminal {
         }
         switch (commandRead.toUpperCase()) {
             case "PROC":
-                System.out.println("PROC entered");
                 proc();
                 commandEntered = "PROC";
                 break;
             case "PAUSE":
-                System.out.println("PAUSE entered");
                 pause();
                 commandEntered = "PAUSE";
                 break;
                 
             case "MEM":
-                System.out.println("MEM entered");
                 commandEntered = "MEM";
                 mem();
                 break;
             case "LOAD":
-                System.out.println("LOAD entered");
                 commandEntered = "LOAD";
                 String fileName = "";
                 fileName = elementsEntered.get(0);
                 load(fileName);
                 break;
             case "EXE":
-                System.out.println("EXE entered");
                 int numOfCycles = -1;
                 if (elementsEntered.size() == 1) {
                     numOfCycles = Integer.parseInt(elementsEntered.get(0));
@@ -59,17 +54,16 @@ public class Terminal {
                 commandEntered = "EXE";
                 break;
             case "RESET":
-                System.out.println("RESET entered");
                 commandEntered = "RESET";
                 reset();
                 break;
             case "EXIT":
-                System.out.println("EXIT entered");
                 commandEntered = "EXIT";
                 exit();
                 break;
             default:
                 commandEntered = "INVALID";
+                System.out.println("Please enter a valid command.");
         }
         System.out.println();
     }
@@ -102,11 +96,7 @@ public class Terminal {
     }
 
     public void reset() {
-        // reset clock
-        // reset scheduler
-        // reset cpu
-        // reset queues
-        // all processes are terminated & simulator clock is 0
+        Weeboo.reset();
     }
 
     public void exit(){
