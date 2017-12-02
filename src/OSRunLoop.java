@@ -105,7 +105,7 @@ public class OSRunLoop extends Thread {
 		synchronized (runLoopLock()) {
 
 			// should consult collection of jobs for any actions to be performed
-			System.out.println("checking for jobs for tick " + _osClockTick);
+//			System.out.println("checking for jobs for tick " + _osClockTick);
 			ArrayList<String>jobsForTick = simulationJobs().get(_osClockTick);
 			
 			if( jobsForTick != null ) {

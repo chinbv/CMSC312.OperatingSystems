@@ -15,7 +15,7 @@ public class Terminal {
         System.out.println("while loop exited");
     }
 
-    public void readCommand() {
+    private void readCommand() {
     	System.out.print("Weeboo: user$ ");
         Scanner readLine = new Scanner(System.in);
         String commandLineEntered = readLine.nextLine();
