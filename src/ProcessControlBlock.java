@@ -184,10 +184,12 @@ public class ProcessControlBlock {
 				Weeboo.processManager().readyQueue().add(this);
 				break;
 			case OUT:
+				System.out.print("process's out command: ");
 				this.getProcessPCBInfo();
 				lastCommandReadIndex++;
 				break;
 			case EXE:
+				System.out.println("should finally EXIT");
 				this.setProcessState(processState.EXIT);
 				break;
 		}

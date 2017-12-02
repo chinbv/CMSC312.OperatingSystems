@@ -57,7 +57,7 @@ public class OSRunLoop extends Thread {
 				ProcessManager.schedulerLock().notifyAll();
 			}
 			
-			Weeboo.processManager().dumpProcessArrayContents();
+//			Weeboo.processManager().dumpProcessArrayContents();
 			
 			//exit
 			System.out.println("Time: " + _osClockTick);
