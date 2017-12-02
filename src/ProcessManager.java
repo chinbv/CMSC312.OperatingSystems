@@ -12,6 +12,7 @@ public class ProcessManager {
 	int lastAssignedProcessId = 0;
 	int processPriority = 0;
 	private static Object _schedulerLock = null;
+	private ArrayList<ProcessControlBlock> _zombieProcesses;
 	
 	private ArrayList<VMPageInfo> _sharedLibraryPages = null;
 
@@ -21,6 +22,9 @@ public class ProcessManager {
 		// allocate shared memory library pages
 		// there assume 64 megabytes
 		_sharedLibraryPages = Weeboo.memoryManager().allocateSharedMemory((long)64 * 1024 * 1024);
+		
+		_zombieProcesses = new ArrayList<ProcessControlBlock>();
+		
 	}
 
 	public ProcessControlBlock createProcessControlBlock(String pathString) throws IOException {
@@ -107,6 +111,14 @@ public class ProcessManager {
 		return processPriority;
 	}
 	
+	public void exitProcess(ProcessControlBlock aPCB) {
+		_zombieProcesses.add(aPCB);
+	}
+	
+	public void cleanUp() {
+		listOfProcesses.removeAll(_zombieProcesses);
+		_zombieProcesses.clear();
+	}
 
 	public void dumpProcessArrayContents() {
 		Iterator<ProcessControlBlock> processListIterator = listOfProcesses.iterator();

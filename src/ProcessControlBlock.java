@@ -152,7 +152,7 @@ public class ProcessControlBlock {
 		Random randomNum = new Random();
 
 		if(op == null) {
-			this.setProcessState(processState.EXIT);
+			exitProcess();
 		}
 
 		// script command
@@ -199,12 +199,28 @@ public class ProcessControlBlock {
 				break;
 			case EXE:
 				System.out.println("should finally EXIT");
-				this.setProcessState(processState.EXIT);
+
+				exitProcess();
 				break;
 		}
 
 	}
 
+	public void exitProcess() {
+		
+		this.setProcessState(processState.EXIT);
+
+		Iterator<VMPageInfo>memoryIterator = _memoryAllocations.iterator();
+		
+		while(memoryIterator.hasNext()) {
+			VMPageInfo aPage = memoryIterator.next();
+			
+			Weeboo.memoryManager().deallocPage(aPage);
+		}
+		
+		Weeboo.processManager().exitProcess(this);
+	}
+	
 	public boolean allocateMemory(long amount) {
 		ArrayList<VMPageInfo> newPagesList = Weeboo.memoryManager().malloc(this, amount);
 

@@ -293,6 +293,12 @@ public class VirtualMemoryManager {
         	aPage.setPageFileLocation(VMPageInfo.notInPageFileSpecialAddress);
 		    
 		}
+		
+		public void deallocPage(VMPageInfo aPage) {
+			if( aPage != null ) {
+				freePageAtPhysicalAddress(aPage.physicalAddress());
+			}
+		}
 
         public long freePageAtPhysicalAddress(long pageAddress)
         {
