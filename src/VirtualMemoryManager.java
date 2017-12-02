@@ -304,6 +304,9 @@ public class VirtualMemoryManager {
         {
         	//TODO probably completely wrong
             _currentFreeMemory += _vmPageSize;
+            if( _currentFreeMemory > physicalMemorySize()) {
+            	_currentFreeMemory = physicalMemorySize();
+            }
             memoryUsed -= _vmPageSize;
             if (memoryUsed < 0)
             {
