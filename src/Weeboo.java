@@ -43,7 +43,7 @@ public class Weeboo {
 		
 		// initialize CPUs
 		System.out.print("Initializing CPUs$...." + "\n");
-		System.out.print("Weeboo: Welcome to Weeboo!$ " + "\n");
+//		System.out.print("Weeboo: Welcome to Weeboo!$ " + "\n");
 
 		cpuArray = new ArrayList<CPU>();
 
