@@ -69,6 +69,30 @@ public class VirtualMemoryManager {
             return allocationList;
         }
         
+        public ArrayList<VMPageInfo> allocateSharedMemory(long allocationAmount) {
+        	
+        	// figure out the number of pages for the allocation amount
+        	int numberOfPages = (int)java.lang.Math.ceil((double)allocationAmount / (double)_vmPageSize);
+        	ArrayList<VMPageInfo>allocationList = new ArrayList<VMPageInfo>();
+        
+        	while( numberOfPages > 0 ) {
+            	VMPageInfo newPageAssignment = new VMPageInfo(0x0, VMPageInfo.pagedOutSpecialAddress, null);
+
+        		if( allocatePhysicalMemoryForPage(newPageAssignment) == false ) {
+        			// allocation failed
+        			numberOfPages = 0;
+        		} else {
+        		
+        			allocationList.add(newPageAssignment);
+        		
+        			numberOfPages--;
+        		}
+        	}
+
+            return allocationList;
+
+        }
+        
         private boolean allocatePhysicalMemoryForPage(VMPageInfo aPage) {
         	
         	// should be a real address in a real system
