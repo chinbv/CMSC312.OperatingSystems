@@ -191,9 +191,6 @@ public class Weeboo {
 			newCPU.initialize();
 		}
 
-		//reset loop
-//		_osRunLoop = new OSRunLoop();
-//		_osRunLoop.start();
 		_osRunLoop.reset();
 	}
 

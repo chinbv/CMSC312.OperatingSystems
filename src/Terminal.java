@@ -12,7 +12,6 @@ public class Terminal {
         while (!commandEntered.toUpperCase().equals("EXIT")) {
             this.readCommand();
         }
-        System.out.println("while loop exited");
     }
 
     private void readCommand() {

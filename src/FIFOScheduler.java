@@ -20,14 +20,7 @@ public class FIFOScheduler  implements OSScheduler{
     public void schedule() {
 
         allCores = Weeboo.allCores();
-
-        System.out.println("QUEUEUEUEUEUEUE b4 PROCESSES HAVE BEEN ASSIGNED TO CORRESS" + ffQueue.size());
-
         ffQueue = coreHelperArrayL(Weeboo.processManager().readyQueue());
-
-
-        System.out.println("QUEUEUEUEUEUEUE AFTER PROCESSES HAVE BEEN ASSIGNED TO CORRESS" + ffQueue.size());
-
     }
 
     public ArrayList<ProcessControlBlock> coreHelperArrayL(ArrayList<ProcessControlBlock> q)
@@ -50,7 +43,6 @@ public class FIFOScheduler  implements OSScheduler{
                 if(q.isEmpty()!=true)
                 {
                     nextp = q.get(0);
-                    System.out.println("THISSSSSSSSSSSSSSSSSSS ISSSSSS THE PRCESSSSSSSSSS BEING GOTTEN OUT" + q.get(0).getProcessName());
                 }
                 if(nextp!=null)
                 {

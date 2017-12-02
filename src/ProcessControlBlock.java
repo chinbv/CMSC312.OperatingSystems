@@ -129,7 +129,6 @@ public class ProcessControlBlock {
 				processLine.nextLine();
 			} else {
 				String line = processLine.nextLine();
-				System.out.println(line);
 				processOperations.add(new ProcessOperation(line));
 			}
 			counter++;
@@ -142,7 +141,7 @@ public class ProcessControlBlock {
 
 		//normally, pages are brought in individually on demand
 		//but for the simulation, we bring all the pages in
-		System.out.println("executeTick before swapping");
+
 
 		Weeboo.memoryManager().swapInProcess(this);
 
@@ -158,7 +157,6 @@ public class ProcessControlBlock {
 		// script command
 		switch (op.getOpType()) {
 			case CALCULATE:
-				System.out.println("Process gets inside calculate");
 				this.setProcessState(processState.RUN);
 				int decrementTime = op.getRunTime() - 1;
 				op.setRunTime(decrementTime);
@@ -193,13 +191,10 @@ public class ProcessControlBlock {
 				Weeboo.processManager().readyQueue().add(this);
 				break;
 			case OUT:
-				System.out.print("process's out command: ");
 				this.getProcessPCBInfo();
 				lastCommandReadIndex++;
 				break;
 			case EXE:
-				System.out.println("should finally EXIT");
-
 				exitProcess();
 				break;
 		}
