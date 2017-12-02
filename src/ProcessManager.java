@@ -43,7 +43,7 @@ public class ProcessManager {
 		newPCB.setProcessState(ProcessControlBlock.processState.NEW);
 
 		// allocate memory for the process
-		newPCB.allocateMemory(fileSize);
+		//newPCB.allocateMemory(fileSize);
 		newPCB.loadExecutable(pathString);
    
 		listOfProcesses.add(newPCB);

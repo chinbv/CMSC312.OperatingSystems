@@ -30,10 +30,10 @@ public class VMPageInfo {
 	
 	public boolean isInPhysicalMemory() {
 		if( _physicalAddress == pagedOutSpecialAddress) {
-			return true;
+			return false;
 		}
 		
-		return false;
+		return true;
 	}
 	
 	public void setPageFileLocation(long anOffset) {

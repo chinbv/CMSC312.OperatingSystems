@@ -104,7 +104,7 @@ public class ProcessControlBlock {
 			if (counter == 0){
 				int processMemory = processLine.nextInt();
 				
-				allocateMemory((long)processMemory*1024*1024);
+				allocateMemory((long)processMemory * 1024 * 1024);
 				processLine.nextLine();
 			} else {
 				String line = processLine.nextLine();
@@ -128,30 +128,33 @@ public class ProcessControlBlock {
 		ProcessOperation op = processOperations.get(lastCommandReadIndex + 1);
 		Random randomNum = new Random();
 
-		// script command
-		switch (op.getOpType()) {
-			case CALCULATE:
-				int decrementTime = op.getRunTime() - 1;
-				op.setRunTime(decrementTime);
-				if (op.getRunTime() == 0) {
-					lastCommandReadIndex++;
-				}
-				simulationJobTicksRemaining--;
-				break;
-			case IO:
-				// IO Interrupt
-				this.setProcessState(processState.WAIT);
-				IORequest newIORequest = new IORequest(this);
-				newIORequest.requestIO();
-				break;
-			case YIELD:
-				break;
-			case OUT:
-				this.getProcessPCBInfo();
-				break;
-			case EXE:
-				this.setProcessState(processState.EXIT);
-				break;
+		if( op != null) {
+		
+			// script command
+			switch (op.getOpType()) {
+				case CALCULATE:
+					int decrementTime = op.getRunTime() - 1;
+					op.setRunTime(decrementTime);
+					if (op.getRunTime() == 0) {
+						lastCommandReadIndex++;
+					}
+					simulationJobTicksRemaining--;
+					break;
+				case IO:
+					// IO Interrupt
+					this.setProcessState(processState.WAIT);
+					IORequest newIORequest = new IORequest(this);
+					newIORequest.requestIO();
+					break;
+				case YIELD:
+					break;
+				case OUT:
+					this.getProcessPCBInfo();
+					break;
+				case EXE:
+					this.setProcessState(processState.EXIT);
+					break;
+			}
 		}
 
 
