@@ -1,223 +1,224 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.*;
 
-class GUI extends JFrame {
+import javax.swing.*;
+import javax.swing.Timer;
+import javax.swing.border.Border;
+import javax.swing.text.DefaultCaret;
+
+public class GUI extends JFrame{
+
     private static JTextArea logArea;
-    private static JTextArea processInfoArea;
-    private static JTextArea simulatorInfoArea;
-    private static DefaultCaret caret;
-    private static JTextArea filePanel = new JTextArea();
-    private JButton btnTutup  = new JButton("Tutup");
-    private JButton btnTambah = new JButton("Tambah");
+    private static JTextArea processArea;
+    private static JTextArea simulationInfoArea;
+    private static String[] lastCommand;
+    private Terminal t;
 
-    private JTextField txtA = new JTextField();
-    private JTextField txtB = new JTextField();
-    private JTextField txtC = new JTextField();
 
-    private JLabel lblA = new JLabel("A :");
-    private JLabel lblB = new JLabel("B :");
-    private JLabel lblC = new JLabel("C :");
-
-    public GUI(){
-        setTitle("WELCOME TO WEEBOO!!!");
-        setSize(400,200);
-        setLocation(new Point(300,200));
-        setLayout(null);
-        setResizable(false);
-
-        initComponent();
-        initEvent();
+    /**
+     * Create the application.
+     */
+    public GUI() {
+        initialize();
     }
 
+    /**
+     * Initialize the contents of the frame.
+     */
+    private void initialize() {
+        setTitle("WELCOME TO WEEBOO!");
+        setBounds(100, 100, 820, 365);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
 
-    private void initComponent(){
-        setBounds(100, 100,820,365);
-        Border border = BorderFactory.createLineBorder(Color.BLACK);
+        Border border = BorderFactory.createLineBorder(Color.BLUE);
 
-        JTextField terminalInputField = new JTextField("Terminal Input Field");
-        terminalInputField.setEditable(true);
-        terminalInputField.setBounds(5, 5,300, 25);
-        terminalInputField.setBorder(border);
+        //Text field for input
+        JTextField inputField = new JTextField("Insert Terminal Input Here");
+        inputField.setEditable(true);
+        inputField.setBounds(5, 5, 300, 25);
+        inputField.setBorder(border);
 
-                //log area
+        //Text area for log
         logArea = new JTextArea();
         logArea.setEditable(false);
 
-        //adds scroll to window
-        JScrollPane logAreaScroll = new JScrollPane(logArea);
-        logAreaScroll.setBounds(5, 40, 300, 300);
-        logAreaScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        logAreaScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        logAreaScroll.setBorder(border);
+        JScrollPane logAreaScrollPane = new JScrollPane(logArea);
+        logAreaScrollPane.setBounds(5, 40, 300, 300);
+        logAreaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        logAreaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        logAreaScrollPane.setBorder(border);
 
-        caret = (DefaultCaret) logArea.getCaret();
+        DefaultCaret caret = (DefaultCaret) logArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
-        //processes area
-        processInfoArea = new JTextArea();
-        processInfoArea.setEditable(false);
+        //Text area for general simulation info
+        simulationInfoArea = new JTextArea();
+        simulationInfoArea.setEditable(false);
+        simulationInfoArea.setBounds(615, 5, 200, 335);
+        simulationInfoArea.setBorder(border);
 
-        JScrollPane processAreaScroll = new JScrollPane(processInfoArea);
-        processAreaScroll.setBounds(310, 5, 300, 335);
-        processAreaScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        processAreaScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        processAreaScroll.setBorder(border);
+        simulationInfoArea.append("Memory Left: ?");
 
-        //simulator area
-        simulatorInfoArea = new JTextArea();
-        simulatorInfoArea.setEditable(false);
-        simulatorInfoArea.setBounds(615, 5, 200, 335);
-        simulatorInfoArea.setBorder(border);
+        //Text area for info on processes
+        processArea = new JTextArea("Processes Data Here");
+        processArea.setEditable(false);
 
-        terminalInputField.addActionListener(new ActionListener() {
+        JScrollPane processAreaScrollPane = new JScrollPane(processArea);
+        processAreaScrollPane.setBounds(310, 5, 300, 335);
+        processAreaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        processAreaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        processAreaScrollPane.setBorder(border);
+
+        getContentPane().add(inputField);
+        getContentPane().add(logAreaScrollPane);
+        getContentPane().add(processAreaScrollPane);
+        getContentPane().add(simulationInfoArea);
+
+        inputField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                lastCommand = inputField.getText().split(" ");
+                appendLogArea(inputField.getText());
+                inputField.setText("");
+                t.initializeTerminal();
 
+
+                switch(lastCommand[0]){
+                    case "LOAD":
+                        appendLogArea("===LOAD Results===");
+                        try {
+                            File jobFile = new File(lastCommand[1]);
+                            if(jobFile.exists()) {
+                                String name = lastCommand[1];
+                                appendLogArea("File exists!");
+                                //JobReader.get().jobReaderIn(jobFile);
+                                //add Process to a queue somewhere in here?
+                                //Pass inputSeparated[1] which contains file name
+                            } else {
+                                appendLogArea("File doesn't exist!");
+                            }
+                        }
+                        catch (ArrayIndexOutOfBoundsException exception){
+                            appendLogArea("File name must be included...");
+                        }
+                        appendLogArea("-----");
+
+                        break;
+                    case "EXE":
+                        if(lastCommand.length == 1){
+                            //CycleClock.get().setIsRunning(true);
+                            //CycleClock.get().setCycleStopTime(-1);
+                        }
+                        if(lastCommand.length == 2) {
+                            if(isInteger(lastCommand[1])) {
+                                int tempInt = Integer.valueOf(lastCommand[1]);
+                                if (tempInt > 0) {
+                                    //LOSK.setCycle(tempInt);
+                                    // CycleClock.get().setCycleStopTime(LOSK.getCycle());
+                                    //CycleClock.get().setIsRunning(true);
+                                    appendLogArea("===Executing===");
+                                }
+                                else{
+                                    appendLogArea("We can't go backwards...");
+                                }
+                            }
+                            else{
+                                appendLogArea("EXE input incorrect!");
+                                appendLogArea("===Execution Cancelled===");
+                            }
+                        }
+                        break;
+                    case "PROC":
+                        appendLogArea("===PROC Results===");
+                        //appendLogArea(Clock.get().getClock() + " Clock time");
+                        //appendLogArea(ProcessScheduler.get().processesCurrentlyWaiting());
+                        //appendLogArea(ProcessScheduler.get().processesInNew());
+                        //appendLogArea(ProcessScheduler.get().processRunning());
+                        //appendLogArea("Cycle time: " + CycleClock.get().getCycleTime());
+                        appendLogArea("-----");
+                        break;
+                    case "MEM":
+                        //Shows current Memory usage
+                        appendLogArea("===MEM Results===");
+                        //appendLogArea(Integer.toString(Memory.get().getMemoryLeft()));
+                        appendLogArea("-----");
+                        break;
+                    case "EXIT":
+                        endLOSK();
+                        break;
+                    case "RESET":
+                        //All unfinished processes are terminated and Clock set to 0
+                        clearLogArea();
+                        //Reset.get().resetAll();
+                        appendLogArea("===\nSimulation Reset\n===");
+                        break;
+                    case "STOP":
+                        //CycleClock.get().setIsRunning(false);
+                        appendLogArea("===\nSimulation Stopped\n===");
+                        break;
+                    case "HELP":
+                        appendLogArea("===HELP Results===");
+                        appendLogArea("List of commands:");
+                        appendLogArea("-LOAD + FileName.txt,\n-EXE + FileName.txt,\n-STOP\n-MEM,\n-EXIT,\n-RESET");
+                        appendLogArea("-----");
+                        break;
+                    default: appendLogArea("Please enter valid command...");
+                        break;
+
+                }
             }
         });
-        btnTutup.setBounds(300,130, 80,25);
-        btnTambah.setBounds(300,100, 80,25);
-
-        txtA.setBounds(100,10,100,20);
-        txtB.setBounds(100,35,100,20);
-        txtC.setBounds(100,65,100,20);
-
-        lblA.setBounds(20,10,100,20);
-        lblB.setBounds(20,35,100,20);
-        lblC.setBounds(20,65,100,20);
-
-
-        add(btnTutup);
-        add(btnTambah);
-
-        add(lblA);
-        add(lblB);
-        add(lblC);
-
-        add(txtA);
-        add(txtB);
-        add(txtC);
     }
 
-    private void initEvent(){
-
-        this.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e){
-                System.exit(1);
-            }
-        });
-
-        btnTutup.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                btnTutupClick(e);
-            }
-        });
-
-        btnTambah.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                btnTambahClick(e);
-            }
-        });
-    }
-
-    private void btnTutupClick(ActionEvent evt){
+    public void endLOSK() {
+        appendLogArea("Exiting LOSK...");
         System.exit(0);
     }
 
-    private void btnTambahClick(ActionEvent evt){
-        Integer x,y,z;
-        try{
-            x = Integer.parseInt(txtA.getText());
-            y = Integer.parseInt(txtB.getText());
-            z = x + y;
-            txtC.setText(z.toString());
-
-        }catch(Exception e){
-            System.out.println(e);
-            JOptionPane.showMessageDialog(null,
-                    e.toString(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+    public boolean isInteger(String s)
+    {
+        try {
+            Integer.parseInt(s);
+            return true;
+        }
+        catch (NumberFormatException ex) {
+            return false;
         }
     }
+
+    public void appendLogArea(String string){
+        logArea.append(string+"\n");
+    }
+
+    public void clearLogArea(){
+        logArea.setText("");
+    }
+
+    public void appendDataArea(String string){
+        processArea.append(string+"\n");
+    }
+
+    public void clearDataArea(){
+        processArea.setText("");
+    }
+
+    public void appendSimulationInfoArea(String string) {
+        simulationInfoArea.append(string+"\n");
+    }
+
+    public void clearSimulationInfoArea() {
+        simulationInfoArea.setText("");
+    }
+
+    public String[] getLastCommand(){
+        return lastCommand;
+    }
+
+    public void onEnter(){
+
+    }
 }
-
-
-
-//
-//import javax.swing.*;
-//import javax.swing.border.Border;
-//import javax.swing.text.DefaultCaret;
-//import java.awt.*;
-//import java.awt.event.ActionEvent;
-//import java.awt.event.ActionListener;
-//
-//public class GUI extends JFrame {
-//    private static JTextArea logArea;
-//    private static JTextArea processInfoArea;
-//    private static JTextArea simulatorInfoArea;
-//    private static DefaultCaret caret;
-//
-//    public GUI() {
-//        System.out.println("guiiugugugiuguigugi");
-//        initialize();
-//    }
-//
-//    public void initialize()
-//    {
-//        setBounds(100, 100,820,365);
-//        Border border = BorderFactory.createLineBorder(Color.BLACK);
-//
-//        //Terminal Input Field
-//        JTextField terminalInputField = new JTextField("Terminal Input Field");
-//        terminalInputField.setEditable(true);
-//        terminalInputField.setBounds(5, 5,300, 25);
-//        terminalInputField.setBorder(border);
-//
-//        //log area
-//        logArea = new JTextArea();
-//        logArea.setEditable(false);
-//
-//        //adds scroll to window
-//        JScrollPane logAreaScroll = new JScrollPane(logArea);
-//        logAreaScroll.setBounds(5, 40, 300, 300);
-//        logAreaScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-//        logAreaScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//        logAreaScroll.setBorder(border);
-//
-//        caret = (DefaultCaret) logArea.getCaret();
-//        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-//
-//        //processes area
-//        processInfoArea = new JTextArea();
-//        processInfoArea.setEditable(false);
-//
-//        JScrollPane processAreaScroll = new JScrollPane(processInfoArea);
-//        processAreaScroll.setBounds(310, 5, 300, 335);
-//        processAreaScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-//        processAreaScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//        processAreaScroll.setBorder(border);
-//
-//        //simulator area
-//        simulatorInfoArea = new JTextArea();
-//        simulatorInfoArea.setEditable(false);
-//        simulatorInfoArea.setBounds(615, 5, 200, 335);
-//        simulatorInfoArea.setBorder(border);
-//
-//        terminalInputField.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//
-//            }
-//        });
-//
-//    }
-//
-//}
