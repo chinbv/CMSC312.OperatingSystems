@@ -57,6 +57,8 @@ public class VirtualMemoryManager {
 
         		allocatePhysicalMemoryForPage(newPageAssignment);
         		allocationList.add(newPageAssignment);
+        		
+        		numberOfPages--;
         	}
 
             return allocationList;
@@ -69,6 +71,7 @@ public class VirtualMemoryManager {
         	
             _currentFreeMemory -= _vmPageSize;
             memoryUsed += _vmPageSize;
+            
             
         }
         

@@ -43,7 +43,7 @@ public class ProcessManager {
 		newPCB.setProcessState(ProcessControlBlock.processState.NEW);
 
 		// allocate memory for the process
-		newPCB.allocateMemory(fileSize);
+		//newPCB.allocateMemory(fileSize);
 		newPCB.loadExecutable(pathString);
    
 		listOfProcesses.add(newPCB);
@@ -94,7 +94,9 @@ public class ProcessManager {
 		while(processListIterator.hasNext() == true) {
 			ProcessControlBlock aProcess = processListIterator.next();
 
-			aProcess.getProcessPCBInfo();
+			if (aProcess.getProcessState() != ProcessControlBlock.processState.EXIT) {
+				aProcess.getProcessPCBInfo();
+			}
 		}
 	}
 
