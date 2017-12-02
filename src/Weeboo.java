@@ -23,6 +23,7 @@ public class Weeboo {
 	private static OSScheduler _systemScheduler = null;
 	private static InterruptHandler _systemInterruptHandler = null;
 	private static Terminal terminal;
+	public static GUI gui;
 	private static ArrayList<CPU> cpuArray = null;
 	private static OSRunLoop _osRunLoop = null;
 
@@ -56,7 +57,7 @@ public class Weeboo {
 		// launch the OS in a separate thread
 		_osRunLoop = new OSRunLoop();
 		_osRunLoop.start();
-		
+		launchGUI();
 		launchTerminal();
 
 		
@@ -151,6 +152,12 @@ public class Weeboo {
 	public static void launchTerminal(){
 		terminal = new Terminal();
 		terminal.initializeTerminal();
+	}
+
+	public static void launchGUI()
+	{
+		gui = new GUI();
+		gui.setVisible(true);
 	}
 	
 	public static void kernelPanic(String customMessage) {
