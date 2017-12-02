@@ -55,22 +55,34 @@ public class VirtualMemoryManager {
         	while( numberOfPages > 0 ) {
             	VMPageInfo newPageAssignment = new VMPageInfo(0x0, VMPageInfo.pagedOutSpecialAddress, aProcess);
 
-        		allocatePhysicalMemoryForPage(newPageAssignment);
-        		allocationList.add(newPageAssignment);
+        		if( allocatePhysicalMemoryForPage(newPageAssignment) == false ) {
+        			// allocation failed
+        			numberOfPages = 0;
+        		} else {
         		
-        		numberOfPages--;
+        			allocationList.add(newPageAssignment);
+        		
+        			numberOfPages--;
+        		}
         	}
 
             return allocationList;
         }
         
-        private void allocatePhysicalMemoryForPage(VMPageInfo aPage) {
+        private boolean allocatePhysicalMemoryForPage(VMPageInfo aPage) {
         	
+        	// should be a real address in a real system
         	long nextFreeMemoryBlock = nextFreeMemoryBlockOfSize(_vmPageSize);
+        	
+        	if( nextFreeMemoryBlock == 0) {
+        		return false;
+        	}
         	aPage.setPhysicalAddress(nextFreeMemoryBlock);
         	
             _currentFreeMemory -= _vmPageSize;
             memoryUsed += _vmPageSize;
+            
+			return true;
             
             
         }
@@ -78,6 +90,55 @@ public class VirtualMemoryManager {
         private long nextFreeMemoryBlockOfSize(long allocationAmount) {
         	//TODO this has to be done for real
         	
+        	if( allocationAmount > _totalPhysicalMemorySize) {
+        		Weeboo.kernelPanic("cannot allocate more memory than total system memory");
+        		return 0;
+        	}
+        	
+        	if( allocationAmount < _currentFreeMemory) {
+        		return _currentFreeMemory;
+        	}
+        	
+        	
+        	// first try wait queue processes
+    		ArrayList<ProcessControlBlock>waitQueue = Weeboo.processManager().waitingQueue();
+        	int waitQueueIndex = waitQueue.size() - 1;
+        	
+        	while( waitQueueIndex >= 0 && allocationAmount > _currentFreeMemory) {
+        		// need to free up physical memory by finding
+        		
+        		ProcessControlBlock aPCB = waitQueue.get(waitQueueIndex);
+        		if( aPCB != null ) {
+        			if( aPCB.isResidentInMemory() == true) {
+        				swapOutProcess(aPCB);
+        			}
+        		}
+        		
+        		waitQueueIndex--;
+        	}
+        	
+        	
+        	// then try ready queue processes
+    		ArrayList<ProcessControlBlock>readyQueue = Weeboo.processManager().readyQueue();
+        	int readyQueueIndex = readyQueue.size() - 1;
+        	while( readyQueueIndex >= 0 && allocationAmount > _currentFreeMemory) {
+        		
+        		ProcessControlBlock aPCB = readyQueue.get(readyQueueIndex);
+        		if( aPCB != null ) {
+        			if( aPCB.isResidentInMemory() == true) {
+        				swapOutProcess(aPCB);
+        			}
+        		}
+        		
+        		readyQueueIndex--;
+
+        	}
+        	
+        	if( allocationAmount > _currentFreeMemory ) {
+            	// otherwise fail
+
+        		return 0;
+        	}
         	// figure out if there is enough free physical memory
         	
         	// if not, then choose a process to swap out
@@ -97,6 +158,9 @@ public class VirtualMemoryManager {
     		if( aProcess == null) {
     			return;
     		}
+    		
+    		System.out.println("Swapping out process " + aProcess.getProcessName());
+
     		/* grab all the pages for a process */
     		ArrayList<VMPageInfo>processPages = aProcess.allMemoryPages();
     		if( processPages != null && processPages.isEmpty() != true ) {
@@ -135,6 +199,8 @@ public class VirtualMemoryManager {
     	}
     	
     	public void swapInProcess(ProcessControlBlock aProcess) {
+    		
+    		System.out.println("Swapping in process " + aProcess.getProcessName());
     		// since we cannot simulate normal paging, we will swap in and out entire processes
     		
     		if( aProcess == null) {
@@ -197,18 +263,18 @@ public class VirtualMemoryManager {
 
 		    // in the simulation, this is just getting the same pageinfo object back
         	// in reality, this would copy the page from page file into physical memory
-		    aPage = pageFileMap.get(aPage.pageFileLocation());
+		    pageFileMap.get(aPage.pageFileLocation());
 		    pageFileMap.remove(aPage.pageFileLocation());
 		    
         	aPage.setPageFileLocation(VMPageInfo.notInPageFileSpecialAddress);
 		    
 		}
 
-        public long freePageAtPhysicalAddress(long value)
+        public long freePageAtPhysicalAddress(long pageAddress)
         {
         	//TODO probably completely wrong
-            _currentFreeMemory += value;
-            memoryUsed -= value;
+            _currentFreeMemory += _vmPageSize;
+            memoryUsed -= _vmPageSize;
             if (memoryUsed < 0)
             {
                 memoryUsed = 0;

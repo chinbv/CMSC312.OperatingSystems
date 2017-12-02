@@ -66,6 +66,22 @@ public class ProcessManager {
 		return readyProcesses;
 	}
 	
+	
+	public ArrayList<ProcessControlBlock> waitingQueue() {
+		ArrayList<ProcessControlBlock> readyProcesses = new ArrayList<ProcessControlBlock>();
+		
+		Iterator<ProcessControlBlock> processIterator = listOfProcesses.iterator();
+		while( processIterator.hasNext()) {
+			ProcessControlBlock aProcess = processIterator.next();
+			
+			if( aProcess.getProcessState() == ProcessControlBlock.processState.WAIT ) {
+				readyProcesses.add(aProcess);
+			}
+		}
+		return readyProcesses;
+	}
+	
+	
 	public static Object schedulerLock() {
 		if( _schedulerLock == null ) {
 			_schedulerLock = new Object();
