@@ -58,6 +58,7 @@ public class Terminal {
                 break;
             case "EXIT":
                 commandEntered = "EXIT";
+                System.out.println("Exiting Weeboo...Bye!");
                 exit();
                 break;
             default:
