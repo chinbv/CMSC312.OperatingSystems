@@ -69,7 +69,7 @@ public class CPUCore extends Thread {
 		stopRequested = true;
 	}
 	
-	public void interrupt(IORequest anIORequest) {
+	public void interruptCore(IORequest anIORequest) {
 		_interrupted = true;
 		
 		// dequeue running process if any
@@ -80,6 +80,8 @@ public class CPUCore extends Thread {
 			this.assignedPCB = null;
 			
 		}
+		
+		_completedIORequest = anIORequest;
 	}
 	
 	public boolean isIdle() {

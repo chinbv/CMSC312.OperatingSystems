@@ -36,17 +36,18 @@ public class RoundRobinScheduler implements OSScheduler {
         for (int i = 0; i < q.size(); i++) {
             p = q.get(i);
             if (p.getRemainingBurstTime() > quantum_time) {
-                if (!roundWait.isEmpty() && roundWait.contains(p)) {
-                    roundWait.remove(p);
+                if (q.isEmpty() && q.contains(p)) {
+                    Weeboo.processManager().readyQueue().remove(p);
                 }
                 rrQueue.add(p);
                 p.setRemainingBurstTime(p.getRemainingBurstTime() - quantum_time);
-                roundWait.add(p);
+                q.add(p);
+
             } else if (p.getRemainingBurstTime() <= quantum_time && p.getRemainingBurstTime() != 0) {
                 rrQueue.add(p);
-                Weeboo.processManager().readyQueue().remove(p);
+                //Weeboo.processManager().readyQueue().remove(p);
                 p.setRemainingBurstTime(p.getRemainingBurstTime() - p.getRemainingBurstTime());
-                q.remove(p);
+                Weeboo.processManager().readyQueue().remove(p);
             }
         }
         /*while(!roundWait.isEmpty())
@@ -57,6 +58,7 @@ public class RoundRobinScheduler implements OSScheduler {
         for (int i = 0; i < rrQueue.size(); i++) {
             System.out.println("SLKDJFSLKJFLSKJDFLSKJDFLSKDJFLKJSDLKFJSLKDFJ in RR METHOD" + rrQueue.size() + "          " + rrQueue.get(i).getProcessName() + rrQueue.get(i).getRemainingBurstTime());
         }
+        //System.out.println("STOP");
         return rrQueue;
 
 

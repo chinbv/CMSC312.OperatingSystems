@@ -88,7 +88,11 @@ public class Terminal {
     }
 
     public void mem(){
-        System.out.println("Memory: "+ Weeboo.memoryManager().memoryUsed() + "/" + Weeboo.memoryManager().physicalMemorySize());
+    	long formatMemUsed = Weeboo.memoryManager().memoryUsed()/(1024 * 1024);
+    	long formatMemFree = Weeboo.memoryManager().currentFreeMemory()/(1024 * 1024);
+    	long formatMemSwap = Weeboo.memoryManager().pageFileUsed()/(1024 * 1024);
+        System.out.println("Memory: Used "+ formatMemUsed + " MB | Free | " + formatMemFree 
+        		+ " MB | Swap | " + formatMemSwap + " MB");
     }
 
     public void reset() {
