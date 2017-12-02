@@ -63,6 +63,8 @@ public class OSRunLoop extends Thread {
 			System.out.println("Time: " + _osClockTick);
 			_osClockTick++;
 			
+			Weeboo.processManager().cleanUp();
+			
 			if( _isAllowedToRun > 0) {
 				_isAllowedToRun--;
 			}
