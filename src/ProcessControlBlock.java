@@ -27,6 +27,11 @@ public class ProcessControlBlock {
 	private String processName;
 	private int remainingBurstTime;
 	private int burstTime;
+	private int arrivalTime;
+	private int startTime;
+	private int waitTime;
+	private int finishTime;
+	private int turnAroundTime;
 	processState _currentState;
 	ArrayList<VMPageInfo> _memoryAllocations;
 	private int simulationJobTicksRemaining;    // for simulation purposes, how long to run
@@ -48,6 +53,10 @@ public class ProcessControlBlock {
 		this.remainingBurstTime = 0;
 		this.burstTime = 0;
 		this.processName = "";
+		this.startTime = 0;
+		this.waitTime = 0;
+		this.finishTime = 0;
+		this.arrivalTime = Weeboo.osRunLoop().currentClockTick();
 		lastCommandReadIndex = -1;
 		this._currentState = processState.NEW;
 		this.memoryNeeded = 0;
@@ -116,6 +125,21 @@ public class ProcessControlBlock {
 		this.numOfIOBursts+= IOnum;
 	}
 
+	public void setWaitTime(int wt) {
+		this.waitTime = wt;
+	}
+
+	public int getWaitTime() {
+		return this.waitTime;
+	}
+
+	public void setfinishTime(int ft) {
+		this.finishTime = ft;
+	}
+
+	public int getTurnAroundTime() {
+		return this.turnAroundTime;
+	}
 	public void loadExecutable(String fileName) throws IOException {
 		this.processName = fileName;
 		Scanner processLine = new Scanner(new File(fileName));
@@ -142,7 +166,10 @@ public class ProcessControlBlock {
 		//normally, pages are brought in individually on demand
 		//but for the simulation, we bring all the pages in
 
-
+		if (Weeboo.getSchedulerChoosen()!=1) {
+			this.startTime = Weeboo.osRunLoop().currentClockTick();
+			this.setWaitTime( this.startTime - this.arrivalTime);
+		}
 		Weeboo.memoryManager().swapInProcess(this);
 
 		System.out.println("executing process ID: " + _processID);
@@ -202,7 +229,12 @@ public class ProcessControlBlock {
 	}
 
 	public void exitProcess() {
-		
+
+		if(Weeboo.getSchedulerChoosen()!=1)
+		{
+			this.setfinishTime(Weeboo.osRunLoop().currentClockTick());
+			this.turnAroundTime = this.finishTime - this.arrivalTime;
+		}
 		this.setProcessState(processState.EXIT);
 
 		Iterator<VMPageInfo>memoryIterator = _memoryAllocations.iterator();

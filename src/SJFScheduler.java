@@ -18,7 +18,6 @@ public class SJFScheduler implements OSScheduler {
 
     @Override
     public void schedule() {
-        System.out.println("schedule is being called " + ++counter );
         allCores = Weeboo.allCores();
 
         sjQueue = coreHelperArrayL(shortestJobScheduling(Weeboo.processManager().readyQueue()));
@@ -30,7 +29,6 @@ public class SJFScheduler implements OSScheduler {
     {
         sjQueue = q;
         for (int i =0;i<sjQueue.size(); i++) {
-            System.out.println("SLKDJFSLKJFLSKJDFLSKJDFLSKDJFLKJSDLKFJSLKDFJ beginininginging" + sjQueue.get(i).getProcessName());
         }
         Collections.sort(sjQueue, shortJobComparator);
 
@@ -66,7 +64,6 @@ public class SJFScheduler implements OSScheduler {
                 if(q.isEmpty()!=true)
                 {
                     nextp = q.get(0);
-                    System.out.println("THISSSSSSSSSSSSSSSSSSS ISSSSSS THE PRCESSSSSSSSSS BEING GOTTEN OUT" + q.get(0).getProcessName());
                 }
                 if(nextp!=null)
                 {

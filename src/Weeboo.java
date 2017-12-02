@@ -58,7 +58,7 @@ public class Weeboo {
 		// launch the OS in a separate thread
 		_osRunLoop = new OSRunLoop();
 		_osRunLoop.start();
-		launchGUI();
+//		launchGUI();
 		launchTerminal();
 
 		

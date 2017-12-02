@@ -127,10 +127,20 @@ public class ProcessManager {
 		}
 		while(processListIterator.hasNext() == true) {
 			ProcessControlBlock aProcess = processListIterator.next();
-
+//			int avgWaitTime = 0;
+//			int avgTurnAroundtime = 0;
+//
+//			int pCounter =0;
 			if (aProcess.getProcessState() != ProcessControlBlock.processState.EXIT) {
 				aProcess.getProcessPCBInfo();
+//				avgWaitTime +=aProcess.getWaitTime();
+//				avgTurnAroundtime += aProcess.getTurnAroundTime();
+//				pCounter++;
 			}
+//
+//			System.out.print("Scheduler Info: \t");
+//			System.out.print("Avg Wait Time: "+ (avgWaitTime/pCounter) + "\t");
+//			System.out.println("Avg Turn Around Time: " + (avgTurnAroundtime/pCounter));
 		}
 	}
 

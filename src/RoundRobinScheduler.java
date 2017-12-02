@@ -56,7 +56,6 @@ public class RoundRobinScheduler implements OSScheduler {
         }*/
 
         for (int i = 0; i < rrQueue.size(); i++) {
-            System.out.println("SLKDJFSLKJFLSKJDFLSKJDFLSKDJFLKJSDLKFJSLKDFJ in RR METHOD" + rrQueue.size() + "          " + rrQueue.get(i).getProcessName() + rrQueue.get(i).getRemainingBurstTime());
         }
         //System.out.println("STOP");
         return rrQueue;
@@ -84,7 +83,6 @@ public class RoundRobinScheduler implements OSScheduler {
                 if(q.isEmpty()!=true)
                 {
                     nextp = q.get(0);
-                    System.out.println("THISSSSSSSSSSSSSSSSSSS ISSSSSS THE PRCESSSSSSSSSS BEING GOTTEN OUT" + q.get(0).getProcessName());
                 }
                 if(nextp!=null)
                 {
