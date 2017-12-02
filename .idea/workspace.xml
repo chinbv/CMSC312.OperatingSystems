@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c93ed75d-42f9-4b7a-a9e5-ccba2c499e37" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/JobFile1.txt" afterPath="$PROJECT_DIR$/JobFile1.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GUI.java" afterPath="$PROJECT_DIR$/src/GUI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/RoundRobinScheduler.java" afterPath="$PROJECT_DIR$/src/RoundRobinScheduler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Weeboo.java" afterPath="$PROJECT_DIR$/src/Weeboo.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -44,7 +40,7 @@
         <entry file="file://$PROJECT_DIR$/src/GUI.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="475">
-              <caret line="25" column="44" lean-forward="false" selection-start-line="25" selection-start-column="44" selection-end-line="25" selection-end-column="44" />
+              <caret line="19" column="47" lean-forward="true" selection-start-line="19" selection-start-column="47" selection-end-line="19" selection-end-column="47" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3504#3635#0" expanded="true" />
@@ -379,7 +375,14 @@
       <option name="project" value="LOCAL" />
       <updated>1512169437004</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Merge branch 'master2' of https://github.com/chinbv/CMSC312.OperatingSystems into master2B&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/FIFOScheduler.java&#10;#&#9;src/RoundRobinScheduler.java&#10;#&#9;src/SJFScheduler.java">
+      <created>1512174561387</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1512174561387</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -853,7 +856,7 @@
     <entry file="file://$PROJECT_DIR$/src/GUI.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="475">
-          <caret line="25" column="44" lean-forward="false" selection-start-line="25" selection-start-column="44" selection-end-line="25" selection-end-column="44" />
+          <caret line="19" column="47" lean-forward="true" selection-start-line="19" selection-start-column="47" selection-end-line="19" selection-end-column="47" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3504#3635#0" expanded="true" />
